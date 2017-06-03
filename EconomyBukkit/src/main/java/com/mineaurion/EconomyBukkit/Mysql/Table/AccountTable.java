@@ -31,6 +31,8 @@ public class AccountTable extends DatabaseTable {
 
 	public final String updateNameByUuid = "UPDATE " + getPrefix() + "account" + " SET NAME=? WHERE UUID=?";
 
+	public final String updateUuidByName = " UPDATE " + getPrefix() + "account" + " SET UUID=? WHERE NAME=?";
+	
 	public final String deleteEntry = "DELETE FROM " + getPrefix() + "account" + " WHERE UUID=?";
 	
 	public final String top = "SELECT * FROM " + getPrefix() + "account" + " WHERE INFINIMONNEY=false ORDER BY BALANCE DESC LIMIT 10";

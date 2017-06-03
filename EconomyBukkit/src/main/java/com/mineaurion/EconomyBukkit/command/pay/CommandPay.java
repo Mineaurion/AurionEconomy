@@ -26,7 +26,7 @@ public class CommandPay implements CommandExecutor {
 				Player player = (Player) sender;
 				if (player.hasPermission("economie.pay")) {
 					if (args.length == 2) {
-						if(!Bukkit.getPlayer(args[0]).isOnline()){
+						if(Bukkit.getServer().getPlayer(args[0]) == null){
 							Main.sendmessage("{{RED}}"+args[0]+" n'est pas connecter", sender.getName());
 							return true;
 						}

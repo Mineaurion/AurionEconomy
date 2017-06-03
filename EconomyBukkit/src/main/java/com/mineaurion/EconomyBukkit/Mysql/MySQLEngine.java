@@ -83,6 +83,30 @@ public class MySQLEngine {
 		}
 		return false;
 	}
+	
+	public static boolean NameExist(String name,String uuid) {
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement(accountTable.selectEntrywithName);
+			statement.setString(1, name);
+			ResultSet set = statement.executeQuery();
+			if (set.isBeforeFirst()) {
+				
+				PreparedStatement statementName = null;
+				statementName = connection.prepareStatement(MySQLEngine.accountTable.updateUuidByName);
+				statementName.setString(1, uuid);
+				statementName.setString(2, name);
+				statementName.executeUpdate();
+				statementName.close();
+				statement.close();
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Main.sendmessage("{{DARK_RED}}" + e.getStackTrace().toString(), "console");
+		}
+		return false;
+	}
 	public static double getBalanceName(String name,Boolean conection) {
 
 		try {

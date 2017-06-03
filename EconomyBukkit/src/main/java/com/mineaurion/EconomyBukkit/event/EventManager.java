@@ -20,8 +20,14 @@ public class EventManager implements Listener {
 		if(Main.getInstance().getConfig().getBoolean("Setup")){
 			Player player = event.getPlayer();
 			if (!MySQLEngine.accountExist(player.getUniqueId().toString())) {
+				if(MySQLEngine.NameExist(player.getName(),player.getUniqueId().toString())){
+					Main.sendmessage(
+							"{{DARK_RED}}UUID"+player.getUniqueId().toString()+" add for"+player.getName(),
+							"console");
+				}else{
 				MySQLEngine.createaccount(player.getUniqueId().toString(), player.getName(),
 						Main.getInstance().getHoldings());
+				}
 			} else {
 				MySQLEngine.updateUsername(player.getName(), player.getUniqueId().toString());
 				Main.getInstance().econ.withdrawPlayer(player,Main.getInstance().econ.getBalance(player));
