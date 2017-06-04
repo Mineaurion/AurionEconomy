@@ -26,9 +26,7 @@
     <!-- Manually entered release version -->
     <release.version>3.0</release.version>
     
-    <!-- Get how many commits have been made since the last tag (the previous release) -->
-    <patch.version>${git.closest.tag.commit.count}</patch.version>
-    <full.version>${release.version}.${patch.version}</full.version>
+    <full.version>${release.version}</full.version>
     
     
     <!-- Standard versions used by the whole project -->
