@@ -50,9 +50,10 @@ public class MySQLEngine {
 	        connection = DriverManager.getConnection("jdbc:mysql://" + address+ ":" + port + "/" + databaseName, user, password);
 	    }
 		
-
+		setupDatabase();
 		accountTable = new AccountTable(prefix);
 		logTable = new LogTable(prefix);
+
 	}
 
 	
@@ -115,14 +116,14 @@ public class MySQLEngine {
 			statement.setString(1, name);
 			ResultSet set = statement.executeQuery();
 			if (set.next()) {
-				if (!set.getBoolean("INFINIMONNEY")) {
-					double balance = set.getDouble("BALANCE");
+				if (!set.getBoolean("infiniMoney")) {
+					double balance = set.getDouble("balance");
 					statement.close();
 					
 					return balance;
 				} else {
 					if(conection){
-						double balance = set.getDouble("BALANCE");
+						double balance = set.getDouble("balance");
 						statement.close();
 						
 						return balance;
@@ -145,14 +146,14 @@ public class MySQLEngine {
 			statement.setString(1, uuid);
 			ResultSet set = statement.executeQuery();
 			if (set.next()) {
-				if (!set.getBoolean("INFINIMONNEY")) {
-					double balance = set.getDouble("BALANCE");
+				if (!set.getBoolean("infiniMoney")) {
+					double balance = set.getDouble("balance");
 					statement.close();
 					
 					return balance;
 				} else {
 					if(conection){
-						double balance = set.getDouble("BALANCE");
+						double balance = set.getDouble("balance");
 						statement.close();
 						
 						return balance;
@@ -293,8 +294,8 @@ public class MySQLEngine {
 			ResultSet set = statement.executeQuery();
 			while (set.next()) {
 				
-				String user = set.getString("NAME");
-				double total = set.getDouble("BALANCE");
+				String user = set.getString("name");
+				double total = set.getDouble("balance");
 				String message = String.valueOf(place) + " : " + user + " -> " + String.valueOf(total);
 				Main.sendmessage(message, src.getName());
 				place++;
