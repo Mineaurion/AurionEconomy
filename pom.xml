@@ -24,7 +24,7 @@
     <skipTests>true</skipTests>
     <maven.test.skip>true</maven.test.skip>
     <!-- Manually entered release version -->
-    <release.version>3.0</release.version>
+    <release.version>3.1</release.version>
     
     <full.version>${release.version}</full.version>
     

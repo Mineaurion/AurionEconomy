@@ -55,3 +55,5 @@ hs_err_pid*
 bukkit/bukkit.iml
 economy.iml
 sponge/sponge.iml
+bukkit/target/*
+sponge/target/*
