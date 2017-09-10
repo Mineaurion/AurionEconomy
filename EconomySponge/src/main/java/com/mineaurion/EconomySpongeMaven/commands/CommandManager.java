@@ -15,6 +15,7 @@ import com.mineaurion.EconomySpongeMaven.commands.money.CMDGive;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDInfinite;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDLog;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDMoney;
+import com.mineaurion.EconomySpongeMaven.commands.money.CMDMoneyHelp;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDset;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDtake;
 import com.mineaurion.EconomySpongeMaven.commands.money.CMDtop;
@@ -61,9 +62,13 @@ public class CommandManager {
 			.permission("economie.money.player")
 			.executor(new CMDtop())
 			.build();
+	
+	private CommandSpec cmdMoneyhelp = CommandSpec.builder()
+			.permission("economie.money.player")
+			.executor(new CMDMoneyHelp())
+			.build();
 
 	public CommandSpec cmdmoney = CommandSpec.builder()
-			.permission("economie.money")
 			.child(cmdbalance, "balance")
 			.child(cmdgive, "give")
 			.child(cmdinfinite, "infinite")
@@ -71,6 +76,7 @@ public class CommandManager {
 			.child(cmdset, "set")
 			.child(cmdtake, "take")
 			.child(cmdtop, "top")
+			.child(cmdMoneyhelp, "help")
 			.executor(new CMDMoney())
 			.build();
 

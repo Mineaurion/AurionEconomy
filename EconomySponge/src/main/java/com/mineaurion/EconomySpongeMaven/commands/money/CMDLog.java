@@ -27,9 +27,9 @@ public class CMDLog implements CommandExecutor {
 		String querry = MySQLEngine.logTable.selectEntry;
 		if (args.<User>getOne("player").isPresent()) {
 			User player = args.<User>getOne("player").get();
-			querry = querry + " WHERE PLAYER=" + player.getName();
+			querry = querry + " WHERE `PLAYER`=" + player.getName();
 		}
-		querry = querry + "ORDER BY `ID` DESC";
+		querry = querry + " ORDER BY `ID` DESC";
 
 		ResultSet res = MySQLEngine.getLog(querry);
 		if (res != null) {
@@ -62,11 +62,11 @@ public class CMDLog implements CommandExecutor {
 						// PLAYER : AMOUNT - TYPE - TIME
 						info = res.getString("PLAYER") + " : " + res.getDouble("AMOUNT") + " - "
 								+ new SimpleDateFormat("HH:mm:ss-dd-MM-yyyy").format(res.getDate("TIME").getTime());
+						src.sendMessage(Text.of(info));
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				src.sendMessage(Text.of(info));
 				return CommandResult.success();
 			}
 		}else{

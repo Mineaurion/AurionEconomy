@@ -64,6 +64,10 @@ public class AAccount implements UniqueAccount {
 	public TransactionResult setBalance(Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
 		TransactionResult transactionResult;
 		if (hasBalance(currency, contexts) && amount.compareTo(BigDecimal.ZERO) >= 0) {
+			if(amount==BigDecimal.valueOf(Double.MAX_VALUE)){
+				return new ATransactionResult(this, currency, amount, contexts, ResultType.CONTEXT_MISMATCH,
+						TransactionTypes.DEPOSIT);
+			}
 			boolean result = MySQLEngine.setBalance(this.uuid.toString(), amount.doubleValue());
 			if (result) {
 				transactionResult = new ATransactionResult(this, currency, amount, contexts, ResultType.SUCCESS,
@@ -102,6 +106,7 @@ public class AAccount implements UniqueAccount {
 	@Override
 	public TransactionResult deposit(Currency currency, BigDecimal amount, Cause cause, Set<Context> contexts) {
 		BigDecimal curBalance = getBalance(currency, contexts);
+		
 		BigDecimal newBalance = curBalance.add(amount);
 		return setBalance(currency, newBalance,
 				Cause.of(NamedCause.of("AurionsEconomy", Main.getInstance().getPlugin())));
@@ -112,6 +117,10 @@ public class AAccount implements UniqueAccount {
 		BigDecimal curBalance = getBalance(currency, contexts);
 		if(curBalance.compareTo(amount)<0||curBalance.compareTo(amount)==0){
 			return new ATransactionResult(this, currency, amount, contexts, ResultType.FAILED,
+					TransactionTypes.WITHDRAW);
+		}
+		if(curBalance==BigDecimal.valueOf(Double.MAX_VALUE)){
+			return new ATransactionResult(this, currency, amount, contexts, ResultType.ACCOUNT_NO_FUNDS,
 					TransactionTypes.WITHDRAW);
 		}
 		BigDecimal newBalance = curBalance.subtract(amount);

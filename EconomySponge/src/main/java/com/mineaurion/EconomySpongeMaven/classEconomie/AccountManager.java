@@ -34,7 +34,7 @@ public class AccountManager implements EconomyService {
 		return Optional.of(playeraccount);
 	}
 
-	// Ne jamais utilis�
+	// Ne jamais utilisé
 	@Override
 	public Optional<Account> getOrCreateAccount(String identifier) {
 		AVirtualAccount virtualAccount = new AVirtualAccount(main, this, identifier);

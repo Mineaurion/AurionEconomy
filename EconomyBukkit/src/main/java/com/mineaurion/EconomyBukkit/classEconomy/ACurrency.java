@@ -1,24 +1,19 @@
-package com.mineaurion.EconomySpongeMaven.classEconomie;
+package com.mineaurion.EconomyBukkit.classEconomy;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
-import org.spongepowered.api.service.economy.Currency;
-import org.spongepowered.api.text.Text;
+import com.mineaurion.EconomyBukkit.DisplayFormat;
+import com.mineaurion.EconomyBukkit.Main;
 
-import com.mineaurion.EconomySpongeMaven.DisplayFormat;
-import com.mineaurion.EconomySpongeMaven.Main;
-
-public class ACurrency implements Currency {
-
-	private Text singular;
-    private Text plural;
-    private Text symbol;
+public class ACurrency {
+	private String singular;
+    private String plural;
+    private String symbol;
     private int numFractionDigits;
     private boolean defaultCurrency;
     
-    public ACurrency(Text singular, Text plural, Text symbol, int numFractionDigits, boolean defaultCurrency) {
+    public ACurrency(String singular, String plural, String symbol, int numFractionDigits, boolean defaultCurrency) {
         this.singular = singular;
         this.plural = plural;
         this.symbol = symbol;
@@ -27,38 +22,37 @@ public class ACurrency implements Currency {
     }
       
     
-	@Override
 	public String getId() {
 		
-		return "AurionsEconomie:"+singular.toPlain();
+		return "AurionsEconomie:"+singular;
 	}
-	@Override
+	
 	public String getName() {
-		
-		return singular.toPlain();
-	}
-	@Override
-	public Text getDisplayName() {
 		
 		return singular;
 	}
-	@Override
-	public Text getPluralDisplayName() {
+	
+	public String getDisplayName() {
+		
+		return singular;
+	}
+	
+	public String getPluralDisplayName() {
 		
 		return plural;
 	}
-	@Override
-	public Text getSymbol() {
+	
+	public String getSymbol() {
 		
 		return symbol;
 	}
-	@Override
-	public Text format(BigDecimal balance, int numFractionDigits) {
+	
+	public String format(double balance) {
 		DisplayFormat format = Main.getInstance().getDisplayFormat();
 		
 		StringBuilder string = new StringBuilder();
 		
-		String[] theAmount = balance.toPlainString().split("\\.");
+		String[] theAmount = Double.toString(balance).split("\\.");
 		
 		DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols();
 		
@@ -99,7 +93,7 @@ public class ACurrency implements Currency {
 					.append(subName).append("{{RESET}}");
 		} else if (format == DisplayFormat.SMALL) {
 			string.append(Main.getInstance().currencyMajorColor).append(amount).append(".").append(Main.getInstance().currencyMinorColor).append(coin)
-					.append("{{RESET}} ").append(name);
+					.append("{{RESET}}").append(name);
 		} else if (format == DisplayFormat.SIGN) {
 			string.append(Main.getInstance().currencyMajorColor).append(Main.getInstance().getCurrencySign()).append(amount).append(".")
 					.append(Main.getInstance().currencyMinorColor).append(coin).append("{{RESET}}");
@@ -110,19 +104,17 @@ public class ACurrency implements Currency {
 			string.append(Main.getInstance().currencyMajorColor).append(amount).append(" ").append(name).append("{{RESET}}");
 		}
 	
-	return Text.of(string.toString());
+	return string.toString();
 	}
-	@Override
+	
 	public int getDefaultFractionDigits() {
 		
 		return numFractionDigits;
 	}
-	@Override
+	
 	public boolean isDefault() {
 		
 		return defaultCurrency;
 	}
     
-    
-	
 }

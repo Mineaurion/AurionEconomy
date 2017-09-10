@@ -47,10 +47,10 @@ public class CMDCheck implements CommandExecutor {
 
 			TransactionResult transactionresult = playeraccount.withdraw(defaultCurrency, amount,
 					Cause.of(NamedCause.of("Aurions", Main.getInstance().getPlugin())));
-			if (transactionresult.getResult() == ResultType.SUCCESS) {
+			if (transactionresult.getResult() == ResultType.SUCCESS||transactionresult.getResult() == ResultType.ACCOUNT_NO_FUNDS) {
 				DateTime dateTime = DateTime.now(DateTimeZone.forID("Europe/Paris"));
 				Main.writeLog(player.getName(), LogInfo.CHECK, Cause.of(NamedCause.of("AurionsEconomy", "Sponge")), dateTime, amount.doubleValue());
-				Main.sendmessage("Tu as retirer {{RED}}" + amountText.toPlainSingle() + "{{WHITE}} � {{YELLOW}}" + player.getName(),
+				Main.sendmessage("Tu as retirer {{RED}}" + amountText.toPlainSingle() + "{{WHITE}} a {{YELLOW}}" + player.getName(),
 						src.getName());
 				String[] parts = commands.split("/");
 
@@ -64,7 +64,7 @@ public class CMDCheck implements CommandExecutor {
 				}
 
 				if (player.isOnline()) {
-					Main.sendmessage("Tu as d�pens� {{RED}}" + amountText.toPlainSingle() + "", player.getName());
+					Main.sendmessage("Tu as depense {{RED}}" + amountText.toPlainSingle() + "", player.getName());
 				}
 				return CommandResult.success();
 			} else {

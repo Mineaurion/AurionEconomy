@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import com.mineaurion.EconomyBukkit.Main;
 import com.mineaurion.EconomyBukkit.PaginatedResult;
@@ -14,14 +15,14 @@ import com.mineaurion.EconomyBukkit.Mysql.MySQLEngine;
 public class CMDLog {
 
 	@SuppressWarnings({ })
-	public CMDLog(CommandSender sender, String[] args) {
+	public CMDLog(CommandSender sender, String[] args) throws NumberFormatException, CommandException, SQLException {
 		String querry = MySQLEngine.logTable.selectEntry;
 		if (args.length == 3) {
-			querry = querry + " WHERE PLAYER=" + args[2];
+			querry = querry + " WHERE `player`=" + args[2]+" ";
 		}
 		querry = querry + "ORDER BY `ID` DESC";
-		ResultSet res = MySQLEngine.getLog(querry);
-		if (res != null) {
+		ResultSet res = MySQLEngine.getLog(querry);		
+		if (res.isBeforeFirst()) {
 			Map<Integer, String> resultat = new HashMap<>();
 			
 			try {
@@ -47,7 +48,7 @@ public class CMDLog {
 				}
 			}.display(sender, resultat.entrySet(), page);
 		}else{
-			Main.sendmessage("{{RED]}}Une erreur est survenu", sender.getName());
+			Main.sendmessage("{{RED}}les logs sont vide", sender.getName());
 		}
 	}
 

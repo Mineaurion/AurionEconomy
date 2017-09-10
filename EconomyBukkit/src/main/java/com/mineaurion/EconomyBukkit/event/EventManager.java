@@ -28,12 +28,7 @@ public class EventManager implements Listener {
 				MySQLEngine.createaccount(player.getUniqueId().toString(), player.getName(),
 						Main.getInstance().getHoldings());
 				}
-			} else {
-				MySQLEngine.updateUsername(player.getName(), player.getUniqueId().toString());
-				Main.getInstance().econ.withdrawPlayer(player,Main.getInstance().econ.getBalance(player));
-				Main.getInstance().econ.depositPlayer(player, MySQLEngine.getBalance(player.getUniqueId().toString(), true));
-			}
-			
+			} 			
 		}
 	}
 	

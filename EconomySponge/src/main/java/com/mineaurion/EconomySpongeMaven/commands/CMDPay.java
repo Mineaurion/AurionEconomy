@@ -19,6 +19,7 @@ import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.service.economy.transaction.TransferResult;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.mineaurion.EconomySpongeMaven.LogInfo;
 import com.mineaurion.EconomySpongeMaven.Main;
@@ -55,13 +56,13 @@ public class CMDPay implements CommandExecutor {
 						Cause.of(NamedCause.of("Aurion", Main.getInstance().getPlugin())));
 
 				if (transferResult.getResult() == ResultType.SUCCESS) {
-					Text amountText = defaultCurrency.format(amount);
+					String amountText = TextSerializers.FORMATTING_CODE.serialize(defaultCurrency.format(amount));
 					DateTime dateTime = DateTime.now(DateTimeZone.forID("Europe/Paris"));
 					Main.writeLog(sender.getName()+"->"+player.getName(), LogInfo.PAY, Cause.of(NamedCause.of("AurionsEconomy", "Sponge")), dateTime, amount.doubleValue());
-					Main.sendmessage("Tu as envoy� {{GOLD}}" + amountText + "{{WHITE}} � " + player.getName(),
+					Main.sendmessage("Tu as envoye {{GOLD}}" + amountText + "{{WHITE}} a " + player.getName(),
 							src.getName());
 					if (player.isOnline()) {
-						Main.sendmessage("Tu as re�u {{GOLD}}" + amountText + "{{WHITE}} de " + src.getName(),
+						Main.sendmessage("Tu as recu {{GOLD}}" + amountText + "{{WHITE}} de " + src.getName(),
 								src.getName());
 					}
 

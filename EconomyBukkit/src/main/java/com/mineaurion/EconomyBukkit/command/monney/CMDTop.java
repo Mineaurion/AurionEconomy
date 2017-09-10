@@ -10,6 +10,7 @@ public class CMDTop {
 
 	public CMDTop(CommandSender sender, String[] args) {
 		MySQLEngine.Balancetop(sender);
+		
 	}
 
 }

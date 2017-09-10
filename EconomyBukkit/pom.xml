@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<version>1.10-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -48,8 +48,8 @@
 
 	<repositories>
 		<repository>
-			<id>bukkit-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
 			<id>vault-repo</id>

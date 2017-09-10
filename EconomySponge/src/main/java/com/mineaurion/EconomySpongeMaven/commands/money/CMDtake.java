@@ -18,6 +18,7 @@ import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.service.economy.transaction.TransactionResult;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.mineaurion.EconomySpongeMaven.LogInfo;
 import com.mineaurion.EconomySpongeMaven.Main;
@@ -40,20 +41,22 @@ public class CMDtake implements CommandExecutor {
 			BigDecimal amount = new BigDecimal(strAmount).setScale(2, BigDecimal.ROUND_DOWN);
 			AAccount playeraccount = (AAccount) accountManager.getOrCreateAccount(player.getUniqueId()).get();
 			Currency defaultCurrency = accountManager.getDefaultCurrency();
-			Text amountText = defaultCurrency.format(amount);
+			String amountText = TextSerializers.FORMATTING_CODE.serialize(defaultCurrency.format(amount));
 
 			TransactionResult transactionresult = playeraccount.withdraw(defaultCurrency, amount,
 					Cause.of(NamedCause.of("Aurions", Main.getInstance().getPlugin())));
 			if (transactionresult.getResult() == ResultType.SUCCESS) {
 				DateTime dateTime = DateTime.now(DateTimeZone.forID("Europe/Paris"));
 				Main.writeLog(player.getName(), LogInfo.TAKE, Cause.of(NamedCause.of("AurionsEconomy", "Sponge")), dateTime, amount.doubleValue());
-				Main.sendmessage("Tu as retirer {{RED}}" + amountText + "{{WHITE}} � {{YELLOW}}" + player.getName(),
+				Main.sendmessage("Tu as retirer {{RED}}" + amountText + "{{WHITE}} a {{YELLOW}}" + player.getName(),
 						src.getName());
 
 				if (player.isOnline()) {
-					Main.sendmessage("Tu as d�pens� {{RED}}" + amountText + "", player.getName());
+					Main.sendmessage("Tu as depense {{RED}}" + amountText + "", player.getName());
 				}
 				return CommandResult.success();
+			}else if(transactionresult.getResult() == ResultType.CONTEXT_MISMATCH){
+				throw new CommandException(Text.of("Erreur le joueur a le mode infini d'activé"));
 			}else {
 				throw new CommandException(Text.of("You don't have money"));
 			}

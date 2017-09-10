@@ -10,17 +10,18 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import com.mineaurion.EconomyBukkit.Mysql.MySQLEngine;
+import com.mineaurion.EconomyBukkit.classEconomy.ACurrency;
+import com.mineaurion.EconomyBukkit.classEconomy.VaultConnector;
 import com.mineaurion.EconomyBukkit.command.Tabcomplete;
 import com.mineaurion.EconomyBukkit.command.admin.CommandAdmin;
 import com.mineaurion.EconomyBukkit.command.monney.CommandMoney;
 import com.mineaurion.EconomyBukkit.command.pay.CommandPay;
 import com.mineaurion.EconomyBukkit.event.EventManager;
-
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 
@@ -28,7 +29,6 @@ public class Main extends JavaPlugin {
 
 	public FileConfiguration config;
 	private static final Logger log = Logger.getLogger("Minecraft");
-	public Economy econ = null;
 
 	@Getter
 	private MySQLEngine mysqlEngine;
@@ -36,7 +36,10 @@ public class Main extends JavaPlugin {
 	private EventManager eventManager = null;
 	@Getter
 	public static Main instance = null;
-
+	@Getter
+	private ACurrency defaultCurrency;
+	@Getter
+	private VaultConnector vaultconnector;
 	@Getter
 	private DisplayFormat displayFormat = null;
 	@Getter
@@ -143,14 +146,11 @@ public class Main extends JavaPlugin {
 			sendmessage("{{RED}}Not found", "console");
 			return false;
 		}
-		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager()
-				.getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (rsp == null) {
-			sendmessage("{{RED}}RSP", "console");
-			return false;
-		}
-		econ = rsp.getProvider();
-		return econ != null;
+		Bukkit.getServer().getServicesManager().register(Economy.class, new VaultConnector(),this, ServicePriority.Highest);
+		defaultCurrency = new ACurrency(currencyName, currencyName + "s", currencySign, 2,
+				true);
+		vaultconnector = new VaultConnector();
+		return true;
 	}
 
 	public void startUp() {

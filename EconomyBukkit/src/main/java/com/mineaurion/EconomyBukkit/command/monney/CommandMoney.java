@@ -1,6 +1,9 @@
 package com.mineaurion.EconomyBukkit.command.monney;
 
+import java.sql.SQLException;
+
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,7 +17,7 @@ public class CommandMoney implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("money")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
-				if(args.length==0){
+				if (args.length == 0) {
 					if (player.hasPermission("economie.money.player")) {
 						new CMDBalance(sender, args);
 					} else {
@@ -50,7 +53,12 @@ public class CommandMoney implements CommandExecutor {
 					return true;
 				case "LOG":
 					if (player.hasPermission("economie.money.admin")) {
-						new CMDLog(sender, args);
+						try {
+							new CMDLog(sender, args);
+						} catch (NumberFormatException | CommandException | SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					} else {
 						noPermission(sender);
 					}
@@ -77,9 +85,16 @@ public class CommandMoney implements CommandExecutor {
 						noPermission(sender);
 					}
 					return true;
+				case "HELP":
+					if (player.hasPermission("economie.money.player")) {
+						new CMDHelp(sender, args);
+					} else {
+						noPermission(sender);
+					}
+					return true;
 				}
 			} else {
-				if(args[0].length()==0){
+				if (args[0].length() == 0) {
 					Main.sendmessage("Use /money balance|give|infinite|log|set|take|top", sender.getName());
 					return true;
 				}
@@ -94,8 +109,14 @@ public class CommandMoney implements CommandExecutor {
 					return true;
 				case "INFINITE":
 					new CMDInfinite(sender, args);
+					return true;
 				case "LOG":
-					new CMDLog(sender, args);
+					try {
+						new CMDLog(sender, args);
+					} catch (NumberFormatException | CommandException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return true;
 				case "SET":
 					new CMDSet(sender, args);
@@ -106,7 +127,11 @@ public class CommandMoney implements CommandExecutor {
 				case "TOP":
 					new CMDTop(sender, args);
 					return true;
+				case "HELP":
+					new CMDHelp(sender, args);
+					return true;
 				}
+
 			}
 			return false;
 

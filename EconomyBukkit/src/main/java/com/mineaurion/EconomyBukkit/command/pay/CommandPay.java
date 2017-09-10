@@ -50,8 +50,8 @@ public class CommandPay implements CommandExecutor {
 								boolean result = MySQLEngine.setBalance(player.getUniqueId().toString(), newbalanceplayer);
 								boolean result2 = MySQLEngine.setBalance(recipient.getUniqueId().toString(), newbalancerecipient);
 								
-								Main.getInstance().econ.withdrawPlayer(player, Double.parseDouble(amount));
-								Main.getInstance().econ.depositPlayer(recipient, Double.parseDouble(amount));
+								Main.getInstance().getVaultconnector().withdrawPlayer(player, Double.parseDouble(amount));
+								Main.getInstance().getVaultconnector().depositPlayer(recipient, Double.parseDouble(amount));
 								
 								if(result&&result2){
 									DateTime dateTime = DateTime.now(DateTimeZone.forID("Europe/Paris"));
