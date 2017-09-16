@@ -1,7 +1,7 @@
-name: EconomyBukkit
+name: AurionsEconomy
 version: 1.0
 author: THEJean_Kevin
-main: com.mineaurion.EconomyBukkit.Main
+main: com.mineaurion.aurionseconomy.Main
 depend: [Vault]
 commands:
     money:

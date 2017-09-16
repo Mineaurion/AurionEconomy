@@ -4,8 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mineaurion</groupId>
-		<artifactId>economy</artifactId>
-		<version>3.0</version>
+		<artifactId>aurionseconomy</artifactId>
+		<version>4.0</version>
 	</parent>
 
 
@@ -14,7 +14,7 @@
 
 	<build>
 		<defaultGoal>clean package</defaultGoal>
-		<finalName>Economy-Sponge-${full.version}</finalName>
+		<finalName>AurionsEconomy-Sponge-${full.version}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
