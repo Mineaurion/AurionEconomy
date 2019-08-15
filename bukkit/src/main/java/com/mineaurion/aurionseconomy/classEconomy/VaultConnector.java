@@ -15,8 +15,10 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 
 public class VaultConnector implements Economy {
-
-	public ACurrency currency = Main.getInstance().getDefaultCurrency();
+    public ACurrency currency;
+	public VaultConnector() {
+        currency = Main.getInstance().getDefaultCurrency();
+	}
 
 	@Override
 	public boolean isEnabled() {

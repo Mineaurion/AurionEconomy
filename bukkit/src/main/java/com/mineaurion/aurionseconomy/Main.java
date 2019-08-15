@@ -56,6 +56,10 @@ public class Main extends JavaPlugin {
 
 	public static String prefix = "{{DARK_GREEN}}[{{WHITE}}Money{{DARK_GREEN}}]{{WHITE}} ";
 
+	public static Main getInstance() {
+		return instance;
+	}
+
 	@Override
 	public void onDisable() {
 		log.info(String.format("[%s] Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
@@ -135,9 +139,10 @@ public class Main extends JavaPlugin {
 			sendmessage("{{RED}}Not found", "console");
 			return false;
 		}
-		Bukkit.getServer().getServicesManager().register(Economy.class, new VaultConnector(),this, ServicePriority.Highest);
-		defaultCurrency = new ACurrency(currencyName, currencyName + "s", currencySign, 2, true);
-		vaultconnector = new VaultConnector();
+        defaultCurrency = new ACurrency(currencyName, currencyName + "s", currencySign, 2, true);
+        vaultconnector = new VaultConnector();
+
+        Bukkit.getServer().getServicesManager().register(Economy.class, new VaultConnector(),this, ServicePriority.Highest);
 		return true;
 	}
 
@@ -336,5 +341,29 @@ public class Main extends JavaPlugin {
 			startUp();
 			sendmessage("{{GOLD}}Ready", name);
 		}
+	}
+
+	public ACurrency getDefaultCurrency() {
+		return defaultCurrency;
+	}
+
+	public DisplayFormat getDisplayFormat() {
+		return displayFormat;
+	}
+
+	public VaultConnector getVaultconnector() {
+		return vaultconnector;
+	}
+
+	public String getCurrencyName() {
+		return "";
+	}
+
+	public String getCurrencyMinor() {
+		return "";
+	}
+
+	public String getCurrencySign() {
+		return "";
 	}
 }
