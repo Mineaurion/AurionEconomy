@@ -1,0 +1,10 @@
+services:
+  mysql:
+    image: mariadb:10.5.13
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: economy
+      MYSQL_USER: mineaurion
+      MYSQL_PASSWORD: password

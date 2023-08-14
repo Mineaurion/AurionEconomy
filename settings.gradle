@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+// rootProject.name = 'economy'
+
+include 'common', 'bukkit', 'sponge', 'forge-1.16', 'forge-1.18', 'fabric'

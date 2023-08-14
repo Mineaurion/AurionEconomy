@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "economy",
+  "version": "${version}",
+  "name": "economy",
+  "description": "A cross server chat with rabbitmq",
+  "authors": [
+    {
+      "name": "Yann151924",
+      "contact": {
+        "sources": "https://github.com/Yann151924"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://mineaurion.com",
+    "sources": "https://github.com/mineaurion/aurionchat",
+    "issues": "https://github.com/Mineaurion/AurionChat/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/economy/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.mineaurion.economy.fabric.Eonomy"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.17",
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "completeconfig": ">=2.1.0"
+  }
+}
