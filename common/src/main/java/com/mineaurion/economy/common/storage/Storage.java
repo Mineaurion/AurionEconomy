@@ -72,6 +72,14 @@ public class Storage {
         }
     }
 
+    public CompletableFuture<Void> createAccount(UUID uuid){
+        return future(() -> this.implementation.createAccount(uuid));
+    }
+
+    /**
+     *
+     * @return return an integer with the amount, otherwise null if player not in storage
+     */
     public CompletableFuture<Integer> getBalance(UUID uuid){
         return future(() -> this.implementation.getBalance(uuid));
     }

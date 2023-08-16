@@ -3,6 +3,8 @@ package com.mineaurion.economy.common.command;
 import com.mineaurion.economy.common.command.sender.Sender;
 import com.mineaurion.economy.common.plugin.EconomyPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,14 +17,26 @@ public abstract class AbstractCommand<T> {
 
     private final @NonNull String permission;
 
+    private final @Nullable String adminPermission;
+
     public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission){
+        this(
+                spec,
+                name,
+                permission,
+                null
+        );
+    }
+
+    public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission, @Nullable String adminPermission){
         this.spec = spec;
         this.name = name;
         this.permission = permission;
+        this.adminPermission = adminPermission;
     }
 
     // Main execution method for the command.
-    public abstract void execute(EconomyPlugin plugin, Sender sender, T target, String[] args, String label) throws Exception;
+    public abstract void execute(EconomyPlugin plugin, Sender sender, T target, List<String> args, String label) throws Exception;
 
 
     // Tab completion method - default implementation is provided as some commands do not provide tab completions.
@@ -45,6 +59,14 @@ public abstract class AbstractCommand<T> {
     public String getUsage(){
         String usage = getSpec().usage();
         return usage == null ? "" : usage;
+    }
+
+    public @NotNull String getPermission(){
+        return permission;
+    }
+
+    public Optional<String> getAdminPermission(){
+        return Optional.ofNullable(adminPermission);
     }
 
     public Optional<List<Argument>> getArgs(){

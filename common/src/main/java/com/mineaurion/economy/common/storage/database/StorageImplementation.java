@@ -16,6 +16,7 @@ public interface StorageImplementation {
 
     void shutdown();
 
+    void createAccount(UUID uuid) throws Exception;
     Integer getBalance(UUID uuid) throws Exception;
     void addAmount(UUID uuid, int amount) throws Exception;
     void setAmount(UUID uuid, int amount) throws Exception;

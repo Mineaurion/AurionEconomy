@@ -30,6 +30,7 @@ public interface Message {
                 .build();
     }
 
+    Args0 COMMAND_CONSOLE_CANT = () -> prefixed(text("The console can't do that, maybe you need another argument")).color(RED);
     Args0 COMMAND_NO_PERMISSION = () -> prefixed(text("You do no have permission to use this command")).color(RED);
 
     Args0 ALREADY_EXECUTING_COMMAND = () -> prefixed(
@@ -54,7 +55,12 @@ public interface Message {
             )
     );
 
-
+    Args2<String, Integer> SET_AMOUNT = (name, amount) -> joinNewline(
+            prefixed(text()
+                    .color(AQUA)
+                    .append(text(String.format("The amount %s has been set for %s", amount, name), WHITE))
+            )
+    );
 
     static Component joinNewline(final ComponentLike... components) {
         return join(JoinConfiguration.newlines(), components);

@@ -1,13 +1,19 @@
 package com.mineaurion.economy.bukkit;
 
+import com.mineaurion.economy.bukkit.vault.VaultConnector;
 import com.mineaurion.economy.common.logger.JavaPluginLogger;
 import com.mineaurion.economy.common.logger.PluginLogger;
 import com.mineaurion.economy.common.plugin.AbstractEconomyPlugin;
 import com.mineaurion.economy.common.plugin.EconomyBootstrap;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public class Economy extends AbstractEconomyPlugin {
 
@@ -23,6 +29,21 @@ public class Economy extends AbstractEconomyPlugin {
     @Override
     protected void registerPlatformListeners() {
         // this.bootstrap.getServer().getPluginManager().registerEvent();
+        if(!setupEconomy()){
+            // TODO: handle it better, this will cause an error when the command will be register
+            getLogger().severe("Disabled due to no Vault Dependency found");
+            getServer().getPluginManager().disablePlugin(this.bootstrap);
+        }
+    }
+
+    private boolean setupEconomy(){
+        if(getServer().getPluginManager().getPlugin("Vault") == null){
+            getLogger().severe("Vault not found");
+            return false;
+        }
+        getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultConnector(this), this.bootstrap, ServicePriority.Highest);
+
+        return true;
     }
 
     @Override
@@ -35,13 +56,21 @@ public class Economy extends AbstractEconomyPlugin {
 
         this.commandManager = new CommandExecutor(this, command);
         this.commandManager.register();
-
-        //TODO: register command here
     }
 
     @Override
     protected void setupSenderFactory() {
         this.senderFactory = new SenderFactory(this);
+    }
+
+    @Override
+    public Optional<UUID> lookupUUID(String username) {
+        return Optional.ofNullable(getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
+    }
+
+    @Override
+    public Optional<String> lookupUsername(UUID uuid) {
+        return Optional.ofNullable(getServer().getOfflinePlayer(uuid)).map(OfflinePlayer::getName);
     }
 
     public SenderFactory getSenderFactory(){

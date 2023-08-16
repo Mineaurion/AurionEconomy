@@ -19,7 +19,6 @@ dependencies {
 
     compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
     api 'net.kyori:adventure-platform-bukkit:4.3.0'
-    compileOnly 'me.lucko:commodore:2.0'
     compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
         exclude(module: 'bukkit')
     }

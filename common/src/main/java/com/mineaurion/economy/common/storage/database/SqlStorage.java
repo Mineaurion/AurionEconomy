@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class SqlStorage implements StorageImplementation {
 
+    private static final String USER_ACCOUNT_CREATE = "INSERT INTO '{prefix}account' (uuid, balance) VALUES(?,?)";
     private static final String USER_ACCOUNT_SELECT = "SELECT uuid, balance FROM '{prefix}account' WHERE uuid= ?";
     private static final String USER_ACCOUNT_SET = "UPDATE '{prefix}account' SET balance=? WHERE uuid=?";
 
@@ -165,6 +166,17 @@ public class SqlStorage implements StorageImplementation {
                 .targetName(rs.getString("acted_name"))
                 .description(rs.getString("action"))
                 .build();
+    }
+
+    @Override
+    public void createAccount(UUID uuid) throws Exception {
+        try(Connection c = this.connectionFactory.getConnection()){
+            try(PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(USER_ACCOUNT_CREATE))){
+                ps.setString(1, uuid.toString());
+                ps.setInt(2, 0);
+                ps.execute();
+            }
+        }
     }
 
     @Override

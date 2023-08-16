@@ -3,7 +3,8 @@ version: ${version}
 main: com.mineaurion.economy.bukkit.Bootstrap
 authors: [Yann151924]
 website: https://mineaurion.com
-load: STARTUP
+depend:
+  - Vault
 commands:
   money:
     description: "Money Command"

@@ -4,7 +4,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mineaurion.economy.common.command.sender.Sender;
-import com.mineaurion.economy.common.commands.Balance;
+import com.mineaurion.economy.common.commands.BalanceInfo;
+import com.mineaurion.economy.common.commands.SetAmount;
 import com.mineaurion.economy.common.locale.Message;
 import com.mineaurion.economy.common.misc.ImmutableCollectors;
 import com.mineaurion.economy.common.plugin.EconomyPlugin;
@@ -38,7 +39,8 @@ public class CommandManager {
     public CommandManager(EconomyPlugin plugin){
         this.plugin = plugin;
         this.mainCommands = ImmutableList.<AbstractCommand<?>>builder()
-                .add(new Balance())
+                .add(new BalanceInfo())
+                .add(new SetAmount())
                 .build()
                 .stream()
                 .collect(ImmutableCollectors.toMap(c -> c.getName().toLowerCase(Locale.ROOT), Function.identity()));
@@ -140,7 +142,7 @@ public class CommandManager {
 
         //Exec command
         try{
-            main.execute(this.plugin, sender, null, arguments.toArray(new String[0]), label);
+            main.execute(this.plugin, sender, null, arguments, label);
         } catch (Exception e){
             e.printStackTrace();
         }

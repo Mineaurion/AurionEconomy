@@ -4,6 +4,9 @@ import com.mineaurion.economy.common.logger.PluginLogger;
 import com.mineaurion.economy.common.storage.Storage;
 import com.mineaurion.economy.common.storage.StorageFactory;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public abstract class AbstractEconomyPlugin implements EconomyPlugin {
 
     private Storage storage;
@@ -17,11 +20,11 @@ public abstract class AbstractEconomyPlugin implements EconomyPlugin {
 
         StorageFactory storageFactory = new StorageFactory(this);
 
-        // register listeners
-        registerPlatformListeners();
-
         // init storage
         this.storage = storageFactory.getInstance();
+
+        // register listeners
+        registerPlatformListeners();
 
         // register commands
         registerCommands();
@@ -42,6 +45,10 @@ public abstract class AbstractEconomyPlugin implements EconomyPlugin {
     protected abstract void setupSenderFactory();
     protected abstract void registerPlatformListeners();
     protected abstract void registerCommands();
+
+    public abstract Optional<UUID> lookupUUID(String username);
+    public abstract Optional<String> lookupUsername(UUID uuid);
+
 
     @Override
     public Storage getStorage() {
