@@ -16,7 +16,7 @@ public class SenderFactory extends com.mineaurion.economy.common.command.sender.
 
     public SenderFactory(Economy plugin){
         super(plugin);
-        this.audiences = BukkitAudiences.create(plugin.getLoader());
+        this.audiences = plugin.getAudiences();
     }
 
     @Override

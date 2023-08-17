@@ -13,11 +13,22 @@ public enum CommandSpec {
             arg("user", true),
             arg("amount", true)
     ),
+
+    WITHDRAW("/%s withdraw <user> <amount>",
+            arg("user", true),
+            arg("amount", true)
+    ),
+
+    ADD("/%s add <user> <amount>",
+            arg("user", true),
+            arg("amount", true)
+    ),
+
     SET("/%s set <user> <amount>",
             arg("user", true),
             arg("amount", true)
     ),
-    PAY("/%s <user> <amount>",
+    PAY("/%s pay <user> <amount>",
             arg("user", true),
             arg("amount", true)
     ),

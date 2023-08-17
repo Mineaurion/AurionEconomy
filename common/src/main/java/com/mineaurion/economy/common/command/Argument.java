@@ -1,5 +1,11 @@
 package com.mineaurion.economy.common.command;
 
+import com.mineaurion.economy.common.locale.Message;
+import net.kyori.adventure.text.Component;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.function.Predicate;
+
 public class Argument {
 
     private final String name;
@@ -22,5 +28,9 @@ public class Argument {
 
     public String getDescription(){
         return this.description;
+    }
+
+    public Component asComponent(){
+        return (this.required ? Message.REQUIRED_ARGUMENT : Message.OPTIONAL_ARGUMENT).build(this.name);
     }
 }

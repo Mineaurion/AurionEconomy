@@ -5,10 +5,13 @@ import com.mineaurion.economy.common.logger.JavaPluginLogger;
 import com.mineaurion.economy.common.logger.PluginLogger;
 import com.mineaurion.economy.common.plugin.AbstractEconomyPlugin;
 import com.mineaurion.economy.common.plugin.EconomyBootstrap;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +24,8 @@ public class Economy extends AbstractEconomyPlugin {
 
     private SenderFactory senderFactory;
     private CommandExecutor commandManager;
+
+    private BukkitAudiences audiences;
 
     public Economy(Bootstrap bootstrap){
         this.bootstrap = bootstrap;
@@ -60,6 +65,7 @@ public class Economy extends AbstractEconomyPlugin {
 
     @Override
     protected void setupSenderFactory() {
+        this.audiences = BukkitAudiences.create(getLoader());
         this.senderFactory = new SenderFactory(this);
     }
 
@@ -71,6 +77,17 @@ public class Economy extends AbstractEconomyPlugin {
     @Override
     public Optional<String> lookupUsername(UUID uuid) {
         return Optional.ofNullable(getServer().getOfflinePlayer(uuid)).map(OfflinePlayer::getName);
+    }
+
+    public void sendMessageToSpecificPlayer(UUID uuid, Component message){
+        Player player = getServer().getPlayer(uuid);
+        if(player != null){
+            audiences.sender(player).sendMessage(message);
+        }
+    }
+
+    public BukkitAudiences getAudiences(){
+        return this.audiences;
     }
 
     public SenderFactory getSenderFactory(){

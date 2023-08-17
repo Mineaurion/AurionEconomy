@@ -4,8 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mineaurion.economy.common.command.sender.Sender;
-import com.mineaurion.economy.common.commands.BalanceInfo;
-import com.mineaurion.economy.common.commands.SetAmount;
+import com.mineaurion.economy.common.commands.*;
 import com.mineaurion.economy.common.locale.Message;
 import com.mineaurion.economy.common.misc.ImmutableCollectors;
 import com.mineaurion.economy.common.plugin.EconomyPlugin;
@@ -41,6 +40,9 @@ public class CommandManager {
         this.mainCommands = ImmutableList.<AbstractCommand<?>>builder()
                 .add(new BalanceInfo())
                 .add(new SetAmount())
+                .add(new AddAmount())
+                .add(new WithdrawAmount())
+                .add(new Pay())
                 .build()
                 .stream()
                 .collect(ImmutableCollectors.toMap(c -> c.getName().toLowerCase(Locale.ROOT), Function.identity()));
@@ -120,6 +122,7 @@ public class CommandManager {
                     .append(Component.text("Running Economy"))
                     .append(Component.space())
             ));
+            return;
         }
 
         AbstractCommand<?> main = this.mainCommands.get(arguments.get(0).toLowerCase(Locale.ROOT));
@@ -130,15 +133,14 @@ public class CommandManager {
             return;
         }
 
-        // if(!main.isAuthorized(sender)){
-            // sendUsage
-        // }
         System.out.println("Argument execute");
         System.out.println(arguments);
 
-        // if(main.getArgumentCheck().test(arguments.size())){
-            // sendDetail usage
-        // }
+        // Check the correct number of args
+        if(main.getArgumentCheck().test(arguments.size())){
+            main.sendUsage(sender, label);
+            return;
+        }
 
         //Exec command
         try{
@@ -147,5 +149,4 @@ public class CommandManager {
             e.printStackTrace();
         }
     }
-
 }

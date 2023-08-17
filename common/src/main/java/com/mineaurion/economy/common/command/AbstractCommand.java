@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public abstract class AbstractCommand<T> {
 
@@ -19,20 +20,24 @@ public abstract class AbstractCommand<T> {
 
     private final @Nullable String adminPermission;
 
-    public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission){
+    private final @NonNull Predicate<Integer> argumentCheck;
+
+    public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission, @NonNull Predicate<Integer> argumentCheck){
         this(
                 spec,
                 name,
                 permission,
-                null
+                null,
+                argumentCheck
         );
     }
 
-    public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission, @Nullable String adminPermission){
+    public AbstractCommand(@NonNull CommandSpec spec, @NonNull String name, @NonNull String permission, @Nullable String adminPermission, @NonNull Predicate<Integer> argumentCheck){
         this.spec = spec;
         this.name = name;
         this.permission = permission;
         this.adminPermission = adminPermission;
+        this.argumentCheck = argumentCheck;
     }
 
     // Main execution method for the command.
@@ -71,6 +76,10 @@ public abstract class AbstractCommand<T> {
 
     public Optional<List<Argument>> getArgs(){
         return Optional.ofNullable(getSpec().args());
+    }
+
+    public @NonNull Predicate<Integer> getArgumentCheck(){
+        return this.argumentCheck;
     }
 
     /**

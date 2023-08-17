@@ -4,6 +4,7 @@ import com.mineaurion.economy.common.command.CommandSpec;
 import com.mineaurion.economy.common.command.SingleCommand;
 import com.mineaurion.economy.common.command.sender.Sender;
 import com.mineaurion.economy.common.locale.Message;
+import com.mineaurion.economy.common.misc.Predicates;
 import com.mineaurion.economy.common.plugin.EconomyPlugin;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 public class BalanceInfo extends SingleCommand {
     public BalanceInfo() {
-        super(CommandSpec.BALANCE, "Balance", "economy.balance", "economy.admin.balance");
+        super(CommandSpec.BALANCE, "Balance", "economy.balance", "economy.money.admin.balance", Predicates.alwaysFalse());
     }
 
     @Override
@@ -19,7 +20,7 @@ public class BalanceInfo extends SingleCommand {
         UUID playerUUID = sender.getUUID();
 
         if(playerUUID == Sender.CONSOLE_UUID && args.size() < 2){
-            Message.COMMAND_CONSOLE_CANT.send(sender);
+            sendUsage(sender, label);
             return;
         }
 
@@ -36,10 +37,5 @@ public class BalanceInfo extends SingleCommand {
             plugin.getStorage().createAccount(playerUUID).join();
         }
         Message.BALANCE_INFO.send(sender, username, balance == null ? 0 : balance);
-    }
-
-    @Override
-    public void sendUsage(Sender sender, String label) {
-
     }
 }

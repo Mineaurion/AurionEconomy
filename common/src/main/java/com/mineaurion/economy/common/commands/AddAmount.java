@@ -10,10 +10,10 @@ import com.mineaurion.economy.common.plugin.EconomyPlugin;
 import java.util.List;
 import java.util.UUID;
 
-public class SetAmount extends SingleCommand {
+public class AddAmount extends SingleCommand {
 
-    public SetAmount(){
-        super(CommandSpec.SET, "Set", "economy.money.admin.set", Predicates.inRange(1,2));
+    public AddAmount(){
+        super(CommandSpec.ADD, "Add", "economy.money.admin.add", Predicates.inRange(1,2));
     }
 
     @Override
@@ -27,7 +27,8 @@ public class SetAmount extends SingleCommand {
         int amount = Integer.parseInt(args.get(2));
         String username = plugin.lookupUsername(playerUUID).orElse("no username");
 
-        plugin.getStorage().setAmount(playerUUID,amount).join();
-        Message.SET_AMOUNT.send(sender, username, amount);
+        plugin.getStorage().addMount(playerUUID, amount).join();
+
+        Message.ADD_AMOUNT.send(sender, username, amount);
     }
 }

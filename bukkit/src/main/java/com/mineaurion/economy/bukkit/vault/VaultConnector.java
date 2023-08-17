@@ -129,6 +129,7 @@ public class VaultConnector implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
+        //TODO: get caller of the method to get the plugin name ? for the log
         double balance = getBalance(playerName);
         if(has(playerName, amount)){
             return new EconomyResponse(0, balance, ResponseType.FAILURE, "Insufficient funds");
