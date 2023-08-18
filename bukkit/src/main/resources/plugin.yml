@@ -1,6 +1,6 @@
 name: Economy
 version: ${version}
-main: com.mineaurion.economy.bukkit.Bootstrap
+main: com.mineaurion.aurioneconomy.bukkit.Bootstrap
 authors: [Yann151924]
 website: https://mineaurion.com
 depend:

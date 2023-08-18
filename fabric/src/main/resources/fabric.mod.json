@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "economy",
+  "id": "aurioneconomy",
   "version": "${version}",
-  "name": "economy",
+  "name": "AurionEconomy",
   "description": "A cross server chat with rabbitmq",
   "authors": [
     {
@@ -22,7 +22,7 @@
   "environment": "server",
   "entrypoints": {
     "server": [
-      "com.mineaurion.economy.fabric.Eonomy"
+      "com.mineaurion.aurioneconomy.fabric.Economy"
     ]
   },
   "depends": {

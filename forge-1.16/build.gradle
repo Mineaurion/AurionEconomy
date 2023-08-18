@@ -51,7 +51,7 @@ minecraft {
             arg '-nogui'
 
             mods {
-                aurionchat {
+                aurioneconomy {
                     source sourceSets.main
                 }
             }

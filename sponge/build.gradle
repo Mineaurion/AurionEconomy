@@ -24,8 +24,8 @@ sponge {
     license("GNU General Public License v3.0")
 
     plugin(pluginId) {
-        displayName("AurionChat")
-        entrypoint("com.mineaurion.economy.sponge.Economy")
+        displayName("AurionEconomy")
+        entrypoint("com.mineaurion.aurioneconomy.sponge.Economy")
         description("Chat across server with rabbitmq")
         links {
             homepage("https://mineaurion.com/")

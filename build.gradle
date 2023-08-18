@@ -44,9 +44,9 @@ subprojects {
     }
 
     shadowJar {
-        relocate 'org.slf4j', 'com.mineaurion.economy.lib.slf4j'
-        relocate 'net.kyori.adventure', 'com.mineaurion.economy.lib.adventure'
-        relocate 'net.kyori.event', 'com.mineaurion.economy.lib.eventbus'
-        relocate 'me.lucko.commodore', 'com.mineaurion.economy.lib.commodore'
+        relocate 'org.slf4j', 'com.mineaurion.aurioneconomy.lib.slf4j'
+        relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
+        relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'
+        relocate 'me.lucko.commodore', 'com.mineaurion.aurioneconomy.lib.commodore'
     }
 }
