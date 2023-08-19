@@ -23,12 +23,14 @@ public class BalanceInfo extends SingleCommand {
             sendUsage(sender, label);
             return;
         }
+        String username = sender.getName();
 
-        if(sender.hasPermission(getAdminPermission().get())){
-            playerUUID = args.size() == 2 ? UUID.fromString(args.get(1)) : sender.getUUID();
+        if(sender.hasPermission(getAdminPermission().get()) && args.size() == 2){
+            playerUUID = getPlayerUUID(plugin, args, 1).orElse(sender.getUUID());
+            username = args.get(1);
+
         }
 
-        String username = plugin.lookupUsername(playerUUID).orElse("no username");
         Integer balance = plugin.getStorage().getBalance(playerUUID).join();
 
         //TODO: move it in loginListener maybe

@@ -76,6 +76,13 @@ public interface Message {
             )
     );
 
+    Args1<String> PLAYER_NOT_FOUND = (player) -> joinNewline(
+            prefixed(text()
+                    .color(AQUA)
+                    .append(text(String.format("The player %s was not found", player), WHITE))
+            )
+    );
+
     Args0 NOT_ENOUGH_CURRENCY = () -> prefixed(
             text("You don't have enough in your account to do this action").color(RED)
     );
@@ -85,11 +92,11 @@ public interface Message {
     );
 
     Args2<Integer, String> PAY_SENDER = (amount, target) -> prefixed(
-            text(String.format("The amount %s has been added to %s's account", amount, target)).color(RED)
+            text(String.format("The amount %s has been added to %s's account", amount, target)).color(BLUE)
     );
 
     Args2<Integer, String> PAY_TARGET = (amount, sender) -> prefixed(
-            text(String.format("You have received %s from %s", amount, sender)).color(RED)
+            text(String.format("You have received %s from %s", amount, sender)).color(BLUE)
     );
 
     Args1<String> REQUIRED_ARGUMENT = name -> text()

@@ -8,6 +8,7 @@ import com.mineaurion.aurioneconomy.common.misc.Predicates;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SetAmount extends SingleCommand {
@@ -23,11 +24,15 @@ public class SetAmount extends SingleCommand {
             return;
         }
 
-        UUID playerUUID = UUID.fromString(args.get(1));
-        int amount = Integer.parseInt(args.get(2));
-        String username = plugin.lookupUsername(playerUUID).orElse("no username");
+        Optional<UUID> playerUUID = getPlayerUUID(plugin, args, 1);
+        if(playerUUID.isPresent()){
+            int amount = Integer.parseInt(args.get(2));
+            String username = args.get(1);
+            plugin.getStorage().setAmount(playerUUID.get(), amount).join();
+            Message.SET_AMOUNT.send(sender, username, amount);
+        } else {
+            Message.PLAYER_NOT_FOUND.send(sender, args.get(1));
+        }
 
-        plugin.getStorage().setAmount(playerUUID,amount).join();
-        Message.SET_AMOUNT.send(sender, username, amount);
     }
 }

@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.common.command;
 
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
+import com.mineaurion.aurioneconomy.common.misc.Utils;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -9,6 +10,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -45,5 +48,9 @@ public abstract class SingleCommand extends AbstractCommand<Void> {
                     .append(Component.join(JoinConfiguration.separator(Component.space()), argUsages));
         }
         sender.sendMessage(builder.build());
+    }
+
+    public Optional<UUID> getPlayerUUID(AurionEconomyPlugin plugin, List<String> args, int index){
+        return Utils.isValidUUID(args.get(index)) ? Optional.of(UUID.fromString(args.get(index))) : plugin.lookupUUID(args.get(index));
     }
 }

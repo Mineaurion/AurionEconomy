@@ -15,22 +15,22 @@ blossom {
 }
 
 sponge {
-    apiVersion("7.4.0")
+    apiVersion("8.1.0")
     loader {
         name(PluginLoaders.JAVA_PLAIN)
-        version(pluginVersion)
+        version("1.0")
     }
 
     license("GNU General Public License v3.0")
 
     plugin(pluginId) {
         displayName("AurionEconomy")
-        entrypoint("com.mineaurion.aurioneconomy.sponge.Economy")
-        description("Chat across server with rabbitmq")
+        entrypoint("com.mineaurion.aurioneconomy.sponge.Bootstrap")
+        description("Multi Platform Economy")
         links {
             homepage("https://mineaurion.com/")
-            source("https://github.com/Mineaurion/AurionChat")
-            issues("https://github.com/Mineaurion/AurionChat/issues")
+            source("https://github.com/Mineaurion/Economy")
+            issues("https://github.com/Mineaurion/Economy/issues")
         }
         contributor("Yann151924") {
             description("Lead Developer")
@@ -38,17 +38,19 @@ sponge {
         dependency("spongeapi") {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
-            version("7.4.0")
-        }
-        dependency("luckperms") {
-            loadOrder(PluginDependency.LoadOrder.AFTER)
-            optional(false)
-            version("5.4.25")
         }
     }
 }
 
 dependencies {
     implementation project(':common')
-    compileOnly 'org.spongepowered:spongeapi:7.4.0'
+    compileOnly 'org.spongepowered:spongeapi:8.1.0'
+    compileOnly 'com.google.guava:guava:21.0'
+}
+
+shadowJar {
+    relocate 'org.slf4j', 'com.mineaurion.aurioneconomy.lib.slf4j'
+    // relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
+    relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'
+    relocate 'me.lucko.commodore', 'com.mineaurion.aurioneconomy.lib.commodore'
 }

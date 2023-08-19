@@ -1,8 +1,8 @@
 package com.mineaurion.aurioneconomy.common.storage.database.hikari;
 
 import com.mineaurion.aurioneconomy.common.misc.StorageCredentials;
-import com.mineaurion.aurioneconomy.common.storage.database.ConnectionFactory;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
+import com.mineaurion.aurioneconomy.common.storage.database.ConnectionFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 

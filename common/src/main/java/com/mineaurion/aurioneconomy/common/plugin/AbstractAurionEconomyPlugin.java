@@ -11,7 +11,11 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
 
     private Storage storage;
 
-    private final PluginLogger logger = getLogger();
+    private final PluginLogger logger;
+
+    public AbstractAurionEconomyPlugin(PluginLogger logger){
+        this.logger = logger;
+    }
 
     public final void enable(){
         logger.info("Economy Starting");

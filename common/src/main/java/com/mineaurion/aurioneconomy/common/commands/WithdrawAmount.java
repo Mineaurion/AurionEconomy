@@ -8,6 +8,7 @@ import com.mineaurion.aurioneconomy.common.misc.Predicates;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class WithdrawAmount extends SingleCommand {
@@ -23,12 +24,16 @@ public class WithdrawAmount extends SingleCommand {
             return;
         }
 
-        UUID playerUUID = UUID.fromString(args.get(1));
-        int amount = Integer.parseInt(args.get(2));
-        String username = plugin.lookupUsername(playerUUID).orElse("no username");
+        Optional<UUID> playerUUID = getPlayerUUID(plugin, args, 1);
+        if(playerUUID.isPresent()){
+            int amount = Integer.parseInt(args.get(2));
+            String username = args.get(1);
+            plugin.getStorage().withdrawAmount(playerUUID.get(), amount).join();
+            Message.WITHDRAW_AMOUNT.send(sender, username, amount);
+        } else {
+            Message.PLAYER_NOT_FOUND.send(sender, args.get(1));
+        }
 
-        plugin.getStorage().withdrawAmount(playerUUID, amount).join();
 
-        Message.WITHDRAW_AMOUNT.send(sender, username, amount);
     }
 }
