@@ -1,9 +1,11 @@
 package com.mineaurion.aurioneconomy.common.storage;
 
 import com.mineaurion.aurioneconomy.common.misc.Throwing;
+import com.mineaurion.aurioneconomy.common.model.Account;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.storage.database.StorageImplementation;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -74,6 +76,10 @@ public class Storage {
 
     public CompletableFuture<Void> createAccount(UUID uuid){
         return future(() -> this.implementation.createAccount(uuid));
+    }
+
+    public CompletableFuture<List<Account>> listAccounts(){
+        return future(this.implementation::listAccounts);
     }
 
     /**

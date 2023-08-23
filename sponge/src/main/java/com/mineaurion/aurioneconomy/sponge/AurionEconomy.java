@@ -1,12 +1,15 @@
 package com.mineaurion.aurioneconomy.sponge;
 
-import com.mineaurion.aurioneconomy.common.logger.PluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
+import com.mineaurion.aurioneconomy.sponge.eco.EconomyService;
+import com.mineaurion.aurioneconomy.sponge.eco.TransactionResultImpl;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
+import org.spongepowered.api.event.lifecycle.RegisterBuilderEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.plugin.PluginContainer;
@@ -31,6 +34,17 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     protected void registerPlatformListeners() {
+    }
+
+    @Listener
+    public void onRegisterServer(final ProvideServiceEvent<EconomyService> event){
+        EconomyService economyService = new EconomyService(this);
+        event.suggest(() -> economyService);
+    }
+
+    @Listener
+    public void onRegisterBuilder(final RegisterBuilderEvent event){
+        event.register(TransactionResultImpl.Builder.class, TransactionResultImpl.Builder::new);
     }
 
     @Override
@@ -96,8 +110,4 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
         return this.bootstrap;
     }
 
-    @Override
-    public PluginLogger getLogger() {
-        return this.bootstrap.getLogger();
-    }
 }

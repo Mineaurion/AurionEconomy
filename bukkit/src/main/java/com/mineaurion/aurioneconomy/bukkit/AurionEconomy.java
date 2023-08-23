@@ -2,9 +2,7 @@ package com.mineaurion.aurioneconomy.bukkit;
 
 import com.mineaurion.aurioneconomy.bukkit.vault.VaultConnector;
 import com.mineaurion.aurioneconomy.common.logger.JavaPluginLogger;
-import com.mineaurion.aurioneconomy.common.logger.PluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
-import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -13,7 +11,6 @@ import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +25,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     private BukkitAudiences audiences;
 
     public AurionEconomy(Bootstrap bootstrap){
+        super(new JavaPluginLogger(Bukkit.getLogger()));
         this.bootstrap = bootstrap;
     }
 
@@ -65,7 +63,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     protected void setupSenderFactory() {
-        this.audiences = BukkitAudiences.create(getLoader());
+        this.audiences = BukkitAudiences.create(getBootstrap());
         this.senderFactory = new SenderFactory(this);
     }
 
@@ -95,20 +93,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     }
 
     @Override
-    public AurionEconomyBootstrap getBootstrap() {
+    public Bootstrap getBootstrap() {
         return this.bootstrap;
     }
 
     public Server getServer(){
         return bootstrap.getServer();
-    }
-
-    public JavaPlugin getLoader(){
-        return this.bootstrap;
-    }
-
-    @Override
-    public PluginLogger getLogger() {
-        return new JavaPluginLogger(Bukkit.getLogger());
     }
 }

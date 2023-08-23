@@ -53,6 +53,10 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
     public abstract Optional<UUID> lookupUUID(String username);
     public abstract Optional<String> lookupUsername(UUID uuid);
 
+    @Override
+    public PluginLogger getLogger() {
+        return this.logger;
+    }
 
     @Override
     public Storage getStorage() {

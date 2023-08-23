@@ -1,10 +1,12 @@
 package com.mineaurion.aurioneconomy.common.storage.database;
 
+import com.mineaurion.aurioneconomy.common.model.Account;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -16,6 +18,8 @@ public class SqlStorage implements StorageImplementation {
     private static final String USER_ACCOUNT_CREATE = "INSERT INTO '{prefix}account' (uuid, balance) VALUES(?,?)";
     private static final String USER_ACCOUNT_SELECT = "SELECT uuid, balance FROM '{prefix}account' WHERE uuid= ?";
     private static final String USER_ACCOUNT_SET = "UPDATE '{prefix}account' SET balance=? WHERE uuid=?";
+
+    private static final String USER_ACCOUNT_SELECT_ALL = "SELECT uuid, balance FROM '{prefix}account'";
 
     private static final String ACTION_INSERT = "INSERT INTO '{prefix}actions' (time, actor_uuid, actor_name, type, acted_uuid, acted_name, action) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String ACTION_SELECT_ALL = "SELECT * FROM '{prefix}actions'";
@@ -177,6 +181,23 @@ public class SqlStorage implements StorageImplementation {
     public boolean checkHasEnough(UUID uuid, int amountToCheck) throws Exception {
         Integer currentBalance = this.getBalance(uuid);
         return currentBalance >= amountToCheck;
+    }
+
+    @Override
+    public List<Account> listAccounts() throws Exception {
+        List<Account> accounts = new ArrayList<>();
+        try(Connection c = this.connectionFactory.getConnection()){
+            try(PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(USER_ACCOUNT_SELECT_ALL))) {
+                try(ResultSet rs = ps.executeQuery()){
+                    while(rs.next()){
+                        accounts.add(
+                                new Account(rs.getString("uuid"), rs.getInt("balance"))
+                        );
+                    }
+                }
+            }
+        }
+        return accounts;
     }
 
     private static boolean tableExists(Connection connection, String table) throws SQLException {
