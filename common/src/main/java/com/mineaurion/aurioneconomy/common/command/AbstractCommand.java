@@ -45,7 +45,7 @@ public abstract class AbstractCommand<T> {
 
 
     // Tab completion method - default implementation is provided as some commands do not provide tab completions.
-    public List<String> tabComplete(AurionEconomyPlugin plugin, String sender, String[] args) {
+    public List<String> tabComplete(AurionEconomyPlugin plugin, Sender sender, List<String> args) {
         return Collections.emptyList();
     }
 

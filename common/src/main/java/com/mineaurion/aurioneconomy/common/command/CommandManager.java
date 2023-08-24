@@ -4,6 +4,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
+import com.mineaurion.aurioneconomy.common.command.tabcomplete.CompletionSupplier;
+import com.mineaurion.aurioneconomy.common.command.tabcomplete.TabCompleter;
 import com.mineaurion.aurioneconomy.common.commands.*;
 import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.ImmutableCollectors;
@@ -148,5 +150,19 @@ public class CommandManager {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<String> tabCompleteCommand(Sender sender, List<String> arguments){
+        final  List<AbstractCommand<?>> mains = new ArrayList<>(this.mainCommands.values());
+
+        return TabCompleter.create()
+                .at(0, CompletionSupplier.startsWith(() -> mains.stream().map(c -> c.getName().toLowerCase(Locale.ROOT))))
+                .from(1, partial -> mains.stream()
+                        .filter(m -> m.getName().equalsIgnoreCase(arguments.get(0)))
+                        .findFirst()
+                        .map(cmd -> cmd.tabComplete(this.plugin, sender, arguments.subList(1, arguments.size())))
+                        .orElse(Collections.emptyList())
+                )
+                .complete(arguments);
     }
 }
