@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.sponge;
 
 import com.mineaurion.aurioneconomy.common.command.CommandManager;
+import com.mineaurion.aurioneconomy.common.misc.ArgumentTokenizer;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandCause;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CommandExecutor extends CommandManager implements Command.Raw {
 
@@ -36,7 +38,13 @@ public class CommandExecutor extends CommandManager implements Command.Raw {
 
     @Override
     public List<CommandCompletion> complete(CommandCause source, ArgumentReader.Mutable arguments) throws CommandException {
-        return new ArrayList<>(); // TODO: not implemented for now
+        return tabCompleteCommand(
+                plugin.getSenderFactory().wrap(source.audience()),
+                ArgumentTokenizer.TAB_COMPLETE.tokenizeInput(arguments.input())
+        ).stream()
+                .map(CommandCompletion::of)
+                .collect(Collectors.toList())
+        ;
     }
 
     @Override

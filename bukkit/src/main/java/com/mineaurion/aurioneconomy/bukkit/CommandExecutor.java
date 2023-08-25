@@ -1,20 +1,21 @@
 package com.mineaurion.aurioneconomy.bukkit;
 
 import com.mineaurion.aurioneconomy.common.command.CommandManager;
+import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import org.bukkit.Server;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 
 
-public class CommandExecutor extends CommandManager implements org.bukkit.command.CommandExecutor, Listener {
+public class CommandExecutor extends CommandManager implements TabExecutor, Listener {
 
     private static final boolean SELECT_ENTITIES_SUPPORTED;
 
@@ -51,6 +52,11 @@ public class CommandExecutor extends CommandManager implements org.bukkit.comman
                 Arrays.asList(args)
         );
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return tabCompleteCommand(plugin.getSenderFactory().wrap(sender), Arrays.asList(args));
     }
 
     // Support Economy command prefixed with a '/' from the console
