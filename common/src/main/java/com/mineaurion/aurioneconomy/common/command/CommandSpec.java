@@ -2,7 +2,6 @@ package com.mineaurion.aurioneconomy.common.command;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public enum CommandSpec {

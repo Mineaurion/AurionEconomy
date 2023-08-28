@@ -3,7 +3,6 @@ package com.mineaurion.aurioneconomy.common.misc;
 import com.google.common.collect.Range;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Locale;
 import java.util.function.Predicate;
 public final class Predicates {
 

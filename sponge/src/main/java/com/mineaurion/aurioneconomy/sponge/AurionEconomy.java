@@ -1,5 +1,6 @@
 package com.mineaurion.aurioneconomy.sponge;
 
+import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.sponge.eco.EconomyService;
 import com.mineaurion.aurioneconomy.sponge.eco.TransactionResultImpl;
@@ -12,9 +13,12 @@ import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
 import org.spongepowered.api.event.lifecycle.RegisterBuilderEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.profile.GameProfile;
-import org.spongepowered.api.util.Nameable;
 import org.spongepowered.plugin.PluginContainer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -80,6 +84,26 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     protected void setupSenderFactory() {
         this.senderFactory = new SenderFactory(this);
+    }
+
+    @Override
+    public ConfigurationAdapter getConfigurationAdapter() {
+        return new SpongeConfigAdapter(this, resolveConfig());
+    }
+
+    private Path resolveConfig() {
+        Path path = this.bootstrap.getConfigDirectory().resolve("aurioneconomy.conf");
+        if (!Files.exists(path)) {
+            try {
+                Bootstrap.createDirectoriesIfNotExists(this.bootstrap.getConfigDirectory());
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream("aurioneconomy.conf")) {
+                    Files.copy(is, path);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return path;
     }
 
     @Override

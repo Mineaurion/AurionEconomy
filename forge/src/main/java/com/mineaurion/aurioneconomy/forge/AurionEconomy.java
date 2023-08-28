@@ -1,5 +1,6 @@
 package com.mineaurion.aurioneconomy.forge;
 
+import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.logger.Log4jPluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
 import com.mojang.authlib.GameProfile;
@@ -56,6 +57,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     protected void registerCommands() {
         // Not used for forge, registered in #registerEarlyListeners
+    }
+
+    @Override
+    public ConfigurationAdapter getConfigurationAdapter() {
+        return new ForgeConfigAdapter(this, resolveConfig("aurioneconomy.conf"));
     }
 
     @Override

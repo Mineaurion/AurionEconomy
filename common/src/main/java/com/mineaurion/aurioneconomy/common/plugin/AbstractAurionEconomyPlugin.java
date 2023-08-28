@@ -4,6 +4,10 @@ import com.mineaurion.aurioneconomy.common.logger.PluginLogger;
 import com.mineaurion.aurioneconomy.common.storage.Storage;
 import com.mineaurion.aurioneconomy.common.storage.StorageFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,6 +31,7 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
         // init storage
         this.storage = storageFactory.getInstance();
 
+
         // register listeners
         registerPlatformListeners();
 
@@ -44,6 +49,26 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
 
         // shutdown async executor pool
         getBootstrap().getScheduler().shutdownExecutor();
+    }
+
+    protected Path resolveConfig(String filename){
+        Path configFile = getBootstrap().getConfigDirectory().resolve(filename);
+
+        // if the cfg don't exist create it from resource dir
+        if(!Files.exists(configFile)){
+            try {
+                Files.createDirectories(configFile.getParent());
+            } catch (IOException e){
+                // ignore
+            }
+
+            try(InputStream is = getBootstrap().getResourceStream(filename)){
+                Files.copy(is, configFile);
+            } catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        }
+        return configFile;
     }
 
     protected abstract void setupSenderFactory();

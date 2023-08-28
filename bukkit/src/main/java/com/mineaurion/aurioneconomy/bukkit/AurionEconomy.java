@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.bukkit;
 
 import com.mineaurion.aurioneconomy.bukkit.vault.VaultConnector;
+import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.logger.JavaPluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -9,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 
@@ -83,6 +83,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public Collection<String> getPlayersList() {
         return getServer().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+    }
+
+    @Override
+    public ConfigurationAdapter getConfigurationAdapter() {
+        return new BukkitConfigurationAdapter(this, resolveConfig("config.yml").toFile());
     }
 
     public void sendMessageToSpecificPlayer(UUID uuid, Component message){

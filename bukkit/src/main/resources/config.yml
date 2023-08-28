@@ -1,0 +1,23 @@
+data:
+  # - Specify as "host:port" if differs
+  address: localhost
+  database: minecraft
+  username: root
+  password: ''
+
+  # These settings apply to the MySQL connection pool.
+  # - The default values will be suitable for the majority of users. If you don't what you are doing, don't touch this
+  pool-settings:
+    maximum-pool-size: 2
+    minimum-idle: 1
+    maximum-lifetime: 1800000 # 30 minutes
+    keep-alive-time: 0
+    connection-timeout: 5000 # 5 seconds
+
+    properties:
+      useUnicode: true
+      characterEncoding: utf8
+      #useSSL: false
+      #verifyServerCertificate: false
+
+  table-prefix: 'aurion_'

@@ -31,7 +31,7 @@ public class VaultConnector implements Economy {
 
     @Override
     public String getName() {
-        return "aurionseconomy";
+        return "aurioneconomy";
     }
 
     @Override

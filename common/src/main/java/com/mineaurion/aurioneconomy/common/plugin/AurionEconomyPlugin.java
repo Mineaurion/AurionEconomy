@@ -1,5 +1,6 @@
 package com.mineaurion.aurioneconomy.common.plugin;
 
+import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.logger.PluginLogger;
 import com.mineaurion.aurioneconomy.common.storage.Storage;
 import net.kyori.adventure.text.Component;
@@ -15,6 +16,8 @@ public interface AurionEconomyPlugin {
     PluginLogger getLogger();
 
     Storage getStorage();
+
+    ConfigurationAdapter getConfigurationAdapter();
 
     Optional<UUID> lookupUUID(String username);
     Optional<String> lookupUsername(UUID uuid);
