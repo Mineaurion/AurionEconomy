@@ -12,10 +12,14 @@ import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
 import org.spongepowered.api.event.lifecycle.RegisterBuilderEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.profile.GameProfile;
+import org.spongepowered.api.util.Nameable;
 import org.spongepowered.plugin.PluginContainer;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
@@ -24,9 +28,6 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     private SenderFactory senderFactory;
 
     private CommandExecutor commandManager;
-
-    // private CommandExecutor commandManager;
-
     public AurionEconomy(Bootstrap bootstrap){
         super(bootstrap.getLogger());
         this.bootstrap = bootstrap;
@@ -96,6 +97,14 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
                 .thenApply(GameProfile::name)
                 .exceptionally(x -> Optional.empty())
                 .join()
+        );
+    }
+
+    @Override
+    public Collection<String> getPlayersList() {
+        return getServer()
+                .map(server -> server.onlinePlayers().stream().map(ServerPlayer::name).collect(Collectors.toList()))
+                .orElse(Collections.emptyList()
         );
     }
 

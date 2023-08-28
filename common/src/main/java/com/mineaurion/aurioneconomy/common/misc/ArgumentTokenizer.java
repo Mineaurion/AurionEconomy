@@ -17,10 +17,6 @@ public enum ArgumentTokenizer {
         }
     };
 
-    public List<String> tokenizeInput(String[] args) {
-        return tokenizeInput(String.join(" ", args));
-    }
-
     public abstract List<String> tokenizeInput(String args);
 
 }

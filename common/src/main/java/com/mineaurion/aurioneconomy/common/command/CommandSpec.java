@@ -9,10 +9,6 @@ public enum CommandSpec {
 
     BALANCE("/%s balance <user>",
             arg("user", false)),
-    GIVE("/% give <user> <amount>",
-            arg("user", true),
-            arg("amount", true)
-    ),
 
     WITHDRAW("/%s withdraw <user> <amount>",
             arg("user", true),
@@ -40,7 +36,6 @@ public enum CommandSpec {
 
     TOP("/%s top"),
 
-    ADMIN("/%s admin"),
     LOG("/%s log");
 
     private final String usage;
@@ -51,18 +46,9 @@ public enum CommandSpec {
         this.args = args.length == 0 ? null : Arrays.stream(args)
                 .map(builder -> {
                     String key = builder.id.replace(".", "").replace(' ', '-');
-                    String description = "economy.usage." + key() + ".argument." + key;
-                    return new Argument(builder.name, builder.required, description);
+                    return new Argument(builder.name, builder.required);
                 })
                 .collect(Collectors.toList());
-    }
-
-    CommandSpec(PartialArgument... args){
-        this(null, args);
-    }
-
-    public String description(){
-        return "economy.usage." + this.key() + ".description";
     }
 
     public String usage(){
@@ -71,14 +57,6 @@ public enum CommandSpec {
 
     public List<Argument> args(){
         return this.args;
-    }
-
-    public String key(){
-        return name().toLowerCase(Locale.ROOT).replace("_", "-");
-    }
-
-    private static PartialArgument arg(String id, String name, boolean required){
-        return new PartialArgument(id, name, required);
     }
 
     private static PartialArgument arg(String name, boolean required){

@@ -35,27 +35,9 @@ public final class Predicates {
         return FALSE;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> alwaysTrue() {
-        return TRUE;
-    }
-
-    public static Predicate<Integer> notInRange(int start, int end) {
-        Range<Integer> range = Range.closed(start, end);
-        return value -> !range.contains(value);
-    }
-
     public static Predicate<Integer> inRange(int start, int end) {
         Range<Integer> range = Range.closed(start, end);
         return range::contains;
-    }
-
-    public static <T> Predicate<T> not(T t) {
-        return obj -> !t.equals(obj);
-    }
-
-    public static <T> Predicate<T> is(T t) {
-        return t::equals;
     }
 
     public static Predicate<String> startsWithIgnoreCase(String prefix) {
@@ -66,14 +48,4 @@ public final class Predicates {
             return string.regionMatches(true, 0, prefix, 0, prefix.length());
         };
     }
-
-    public static Predicate<String> containsIgnoreCase(String substring) {
-        return string -> {
-            if (string.length() < substring.length()) {
-                return false;
-            }
-            return string.toLowerCase(Locale.ROOT).contains(substring.toLowerCase(Locale.ROOT));
-        };
-    }
-
 }

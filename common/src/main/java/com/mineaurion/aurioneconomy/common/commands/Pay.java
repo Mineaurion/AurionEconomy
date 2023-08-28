@@ -7,6 +7,7 @@ import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.Predicates;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class Pay extends SingleCommand {
 
     public Pay(){
-        super(CommandSpec.PAY, "Pay", "economy.pay", Predicates.inRange(1,2));
+        super(CommandSpec.PAY, "Pay", "economy.money.pay", Predicates.inRange(1,2));
     }
 
     @Override
@@ -49,5 +50,10 @@ public class Pay extends SingleCommand {
         } else {
             Message.NOT_ENOUGH_CURRENCY.send(sender);
         }
+    }
+
+    @Override
+    public List<String> tabComplete(AurionEconomyPlugin plugin, Sender sender, List<String> args) {
+        return new ArrayList<>(plugin.getPlayersList());
     }
 }

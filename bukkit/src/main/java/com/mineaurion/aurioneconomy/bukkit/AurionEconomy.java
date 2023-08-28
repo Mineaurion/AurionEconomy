@@ -9,11 +9,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
@@ -75,6 +78,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public Optional<String> lookupUsername(UUID uuid) {
         return Optional.ofNullable(getServer().getOfflinePlayer(uuid)).map(OfflinePlayer::getName);
+    }
+
+    @Override
+    public Collection<String> getPlayersList() {
+        return getServer().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
     }
 
     public void sendMessageToSpecificPlayer(UUID uuid, Component message){

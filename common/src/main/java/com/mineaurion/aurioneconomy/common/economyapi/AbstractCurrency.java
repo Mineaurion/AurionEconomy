@@ -7,12 +7,12 @@ public abstract class AbstractCurrency {
     private int fractionDigits;
     private boolean defaultCurrency;
 
-    public AbstractCurrency(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurreny){
+    public AbstractCurrency(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurrency){
         this.singular = singular;
         this.plural = plural;
         this.symbol = symbol;
         this.fractionDigits = fractionDigits;
-        this.defaultCurrency = defaultCurreny;
+        this.defaultCurrency = defaultCurrency;
     }
 
     public String getId(){

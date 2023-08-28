@@ -7,12 +7,14 @@ import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.Predicates;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class BalanceInfo extends SingleCommand {
     public BalanceInfo() {
-        super(CommandSpec.BALANCE, "Balance", "economy.balance", "economy.money.admin.balance", Predicates.alwaysFalse());
+        super(CommandSpec.BALANCE, "Balance", "economy.money.balance", "economy.money.admin.balance", Predicates.alwaysFalse());
     }
 
     @Override
@@ -39,5 +41,13 @@ public class BalanceInfo extends SingleCommand {
             plugin.getStorage().createAccount(playerUUID).join();
         }
         Message.BALANCE_INFO.send(sender, username, balance == null ? 0 : balance);
+    }
+
+    @Override
+    public List<String> tabComplete(AurionEconomyPlugin plugin, Sender sender, List<String> args) {
+        if(sender.hasPermission(getAdminPermission().get())){
+            return new ArrayList<>(plugin.getPlayersList());
+        }
+        return Collections.emptyList();
     }
 }

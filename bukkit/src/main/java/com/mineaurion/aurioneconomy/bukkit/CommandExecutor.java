@@ -1,7 +1,6 @@
 package com.mineaurion.aurioneconomy.bukkit;
 
 import com.mineaurion.aurioneconomy.common.command.CommandManager;
-import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.event.EventHandler;

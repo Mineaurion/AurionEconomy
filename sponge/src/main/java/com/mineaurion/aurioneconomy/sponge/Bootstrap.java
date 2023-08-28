@@ -37,10 +37,7 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
         this.injector = injector;
         this.game = injector.getInstance(Game.class);
         this.pluginContainer = injector.getInstance(PluginContainer.class);
-        // injector.injectMembers(this);
-
         this.schedulerAdapter = new SpongeSchedulerAdapter(this.game, this.pluginContainer);
-        System.out.println("Je paaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasse laa");
     }
 
     @Override
@@ -50,7 +47,6 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
 
     @Listener(order = Order.FIRST)
     public void onEnable(ConstructPluginEvent event){
-        System.out.println("Je passe la 222222222222222");
         this.plugin = new AurionEconomy(this);
         this.plugin.enable();
     }
@@ -92,9 +88,9 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
         return this.game.isServerAvailable() ? Optional.of(this.game.server()) : Optional.empty();
     }
 
-    public static Path createDirectoriesIfNotExists(Path path) throws IOException {
+    public static void createDirectoriesIfNotExists(Path path) throws IOException {
         if (Files.exists(path) && (Files.isDirectory(path) || Files.isSymbolicLink(path))) {
-            return path;
+            return;
         }
 
         try {
@@ -102,8 +98,6 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
         } catch (FileAlreadyExistsException e) {
             // ignore
         }
-
-        return path;
     }
 
     public PluginLogger getLogger() {

@@ -29,8 +29,6 @@ public interface Message {
                 .append(component)
                 .build();
     }
-
-    Args0 COMMAND_CONSOLE_CANT = () -> prefixed(text("The console can't do that, maybe you need another argument")).color(RED);
     Args0 COMMAND_NO_PERMISSION = () -> prefixed(text("You do no have permission to use this command")).color(RED);
 
     Args0 ALREADY_EXECUTING_COMMAND = () -> prefixed(
@@ -39,8 +37,6 @@ public interface Message {
     );
 
     Args2<String, Integer> BALANCE_INFO = (name, amount) -> joinNewline(
-            // Player: &f{}
-            // Amount: &f{}
             prefixed(text()
                     .color(AQUA)
                     .append(text("- ", WHITE))

@@ -3,7 +3,6 @@ package com.mineaurion.aurioneconomy.forge;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -19,11 +18,10 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.NetworkConstants;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.lang.reflect.InvocationTargetException;
 
 @Mod(value = "aurioneconomy")
 public class Bootstrap implements AurionEconomyBootstrap {

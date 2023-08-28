@@ -7,10 +7,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
@@ -62,6 +66,15 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public Optional<String> lookupUsername(UUID uuid) {
         return bootstrap.getServer().map(MinecraftServer::getProfileCache).flatMap(gameProfileCache -> gameProfileCache.get(uuid)).map(GameProfile::getName);
+    }
+
+    @Override
+    public Collection<String> getPlayersList() {
+        return bootstrap.getServer()
+                .map(MinecraftServer::getPlayerList)
+                .map(PlayerList::getPlayers)
+                .map(serverPlayers -> serverPlayers.stream().map(p -> p.getGameProfile().getName()).collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
     }
 
     @Override

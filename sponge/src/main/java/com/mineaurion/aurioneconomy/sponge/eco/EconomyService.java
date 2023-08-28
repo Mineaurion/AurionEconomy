@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EconomyService  implements org.spongepowered.api.service.economy.EconomyService {
-
-
     private final AurionEconomy plugin;
     private final CurrencyImpl currency;
 

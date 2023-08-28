@@ -17,16 +17,11 @@ public abstract class BrigadierCommandManager<S> extends CommandManager implemen
 
     protected static final String[] COMMAND_ALIASES = new String[]{"money", "economy", "aurion"};
 
-    private final AurionEconomyPlugin plugin;
-
     protected BrigadierCommandManager(AurionEconomyPlugin plugin){
         super(plugin);
-        this.plugin = plugin;
     }
 
     public abstract Sender getSender(S source);
-
-    public abstract List<String> resolveSelector(S source, List<String> args);
 
     @Override
     public int run(CommandContext<S> context) throws CommandSyntaxException {
@@ -59,7 +54,7 @@ public abstract class BrigadierCommandManager<S> extends CommandManager implemen
 
         List<String> arguments = ArgumentTokenizer.TAB_COMPLETE.tokenizeInput(buffer);
 
-        if(!arguments.isEmpty() && !arguments.isEmpty()){
+        if(!arguments.isEmpty()){
             idx -= arguments.get(arguments.size() - 1).length();
         }
 

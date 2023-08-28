@@ -13,6 +13,7 @@ import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.plugin.scheduler.SchedulerAdapter;
 import com.mineaurion.aurioneconomy.common.plugin.scheduler.SchedulerTask;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.*;
@@ -35,11 +36,11 @@ public class CommandManager {
     );
 
     private final AtomicBoolean executingCommand = new AtomicBoolean(false);
-    private final Map<String, AbstractCommand<?>> mainCommands;
+    private final Map<String, AbstractCommand> mainCommands;
 
     public CommandManager(AurionEconomyPlugin plugin){
         this.plugin = plugin;
-        this.mainCommands = ImmutableList.<AbstractCommand<?>>builder()
+        this.mainCommands = ImmutableList.<AbstractCommand>builder()
                 .add(new BalanceInfo())
                 .add(new SetAmount())
                 .add(new AddAmount())
@@ -55,7 +56,7 @@ public class CommandManager {
     }
 
     @VisibleForTesting
-    public Map<String, AbstractCommand<?>> getMainCommands(){
+    public Map<String, AbstractCommand> getMainCommands(){
         return this.mainCommands;
     }
 
@@ -127,18 +128,13 @@ public class CommandManager {
             return;
         }
 
-        AbstractCommand<?> main = this.mainCommands.get(arguments.get(0).toLowerCase(Locale.ROOT));
+        AbstractCommand main = this.mainCommands.get(arguments.get(0).toLowerCase(Locale.ROOT));
 
         if(main == null){
-            // TODO: change the message bellow
-            sender.sendMessage(Component.text("Main is null"));
+            sendCommandUsage(sender, label);
             return;
         }
 
-        System.out.println("Argument execute");
-        System.out.println(arguments);
-
-        // Check the correct number of args
         if(main.getArgumentCheck().test(arguments.size())){
             main.sendUsage(sender, label);
             return;
@@ -146,14 +142,16 @@ public class CommandManager {
 
         //Exec command
         try{
-            main.execute(this.plugin, sender, null, arguments, label);
+            main.execute(this.plugin, sender, arguments, label);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
     public List<String> tabCompleteCommand(Sender sender, List<String> arguments){
-        final  List<AbstractCommand<?>> mains = new ArrayList<>(this.mainCommands.values());
+        final  List<AbstractCommand> mains = this.mainCommands.values().stream()
+                .filter(m -> m.isAuthorized(sender))
+                .collect(Collectors.toList());
 
         return TabCompleter.create()
                 .at(0, CompletionSupplier.startsWith(() -> mains.stream().map(c -> c.getName().toLowerCase(Locale.ROOT))))
@@ -164,5 +162,23 @@ public class CommandManager {
                         .orElse(Collections.emptyList())
                 )
                 .complete(arguments);
+    }
+
+    private void sendCommandUsage(Sender sender, String label) {
+        sender.sendMessage(Message.prefixed(Component.text()
+                .color(NamedTextColor.DARK_GREEN)
+                .append(Component.text("Running "))
+                .append(Component.text("Economy", NamedTextColor.AQUA))
+        ));
+
+        this.mainCommands.values().stream()
+                .filter(c -> c.isAuthorized(sender))
+                .forEach(c -> sender.sendMessage(Component.text()
+                        .append(Component.text('>', NamedTextColor.DARK_AQUA))
+                        .append(Component.space())
+                        .append(Component.text(String.format(c.getUsage(), label), NamedTextColor.GREEN))
+                        .clickEvent(ClickEvent.suggestCommand(String.format(c.getUsage(), label)))
+                        .build()
+                ));
     }
 }

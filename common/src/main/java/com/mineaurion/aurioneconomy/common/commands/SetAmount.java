@@ -7,6 +7,7 @@ import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.Predicates;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,10 @@ public class SetAmount extends SingleCommand {
         } else {
             Message.PLAYER_NOT_FOUND.send(sender, args.get(1));
         }
+    }
 
+    @Override
+    public List<String> tabComplete(AurionEconomyPlugin plugin, Sender sender, List<String> args) {
+        return new ArrayList<>(plugin.getPlayersList());
     }
 }

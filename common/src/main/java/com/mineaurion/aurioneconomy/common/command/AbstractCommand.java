@@ -6,12 +6,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public abstract class AbstractCommand<T> {
+public abstract class AbstractCommand {
 
     private final @NonNull CommandSpec spec;
     private final @NonNull String name;
@@ -41,10 +42,10 @@ public abstract class AbstractCommand<T> {
     }
 
     // Main execution method for the command.
-    public abstract void execute(AurionEconomyPlugin plugin, Sender sender, T target, List<String> args, String label) throws Exception;
+    public abstract void execute(AurionEconomyPlugin plugin, Sender sender, List<String> args, String label) throws Exception;
 
 
-    // Tab completion method - default implementation is provided as some commands do not provide tab completions.
+    // Tab completion method - default implementation provided since some commands do not provide more tab completion.
     public List<String> tabComplete(AurionEconomyPlugin plugin, Sender sender, List<String> args) {
         return Collections.emptyList();
     }
@@ -55,10 +56,6 @@ public abstract class AbstractCommand<T> {
 
     public @NonNull String getName() {
         return this.name;
-    }
-
-    public String getDescription(){
-        return getSpec().description();
     }
 
     public String getUsage(){
@@ -83,8 +80,15 @@ public abstract class AbstractCommand<T> {
     }
 
     /**
+     * The admin permission in untreated here, directly handle in the command class for less complication
+     * @return boolean true if the sender has permissions
+     */
+    public boolean isAuthorized(Sender sender){
+        return sender.hasPermission(getPermission());
+    }
+
+    /**
      * Sends a brief command usage message to the Sender.
-     * If this command has child commands, the children are listed. Otherwise, a basic usage message is sent.
      */
     public abstract void sendUsage(Sender sender, String label);
 }

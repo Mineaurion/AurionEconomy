@@ -10,14 +10,12 @@ import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.command.parameter.ArgumentReader;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CommandExecutor extends CommandManager implements Command.Raw {
-
     private final AurionEconomy plugin;
 
     public CommandExecutor(AurionEconomy plugin){

@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class SingleCommand extends AbstractCommand<Void> {
+public abstract class SingleCommand extends AbstractCommand {
 
     public SingleCommand(CommandSpec spec, String name, String permission, Predicate<Integer> argumentCheck){
         super(spec, name, permission, argumentCheck);
@@ -23,11 +23,6 @@ public abstract class SingleCommand extends AbstractCommand<Void> {
 
     public SingleCommand(CommandSpec spec, String name, String permission, String adminPermission, Predicate<Integer> argumentCheck){
         super(spec, name, permission, adminPermission, argumentCheck);
-    }
-
-    @Override
-    public void execute(AurionEconomyPlugin plugin, Sender sender, Void ignored, List<String> args, String label) throws Exception {
-        execute(plugin, sender, args, label);
     }
 
     public abstract void execute(AurionEconomyPlugin plugin, Sender sender, List<String> args, String label) throws Exception;

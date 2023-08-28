@@ -2,9 +2,10 @@ package com.mineaurion.aurioneconomy.common.command.tabcomplete;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 public class TabCompleter {
@@ -67,7 +68,7 @@ public class TabCompleter {
             return this.suppliers.get(this.from).supplyCompletions(partial);
         }
 
-        return this.suppliers.getOrDefault(position, CompletionSupplier.EMPTY).supplyCompletions(partial);
+        return this.suppliers.getOrDefault(position, empty -> Collections.emptyList()).supplyCompletions(partial);
     }
 
 }
