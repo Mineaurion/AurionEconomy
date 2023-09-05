@@ -23,11 +23,11 @@ public class CommandExecutor extends BrigadierCommandManager<CommandSourceStack>
     public void onRegisterCommands(RegisterCommandsEvent event){
         for(String alias: COMMAND_ALIASES){
             LiteralCommandNode<CommandSourceStack> command = Commands.literal(alias).executes(this).build();
-            ArgumentCommandNode<CommandSourceStack, String> argument = Commands.argument("args", StringArgumentType.greedyString())
+            ArgumentCommandNode<CommandSourceStack, String> arguments = Commands.argument("args", StringArgumentType.greedyString())
                     .suggests(this)
                     .executes(this)
                     .build();
-            command.addChild(argument);
+            command.addChild(arguments);
             event.getDispatcher().getRoot().addChild(command);
         }
     }

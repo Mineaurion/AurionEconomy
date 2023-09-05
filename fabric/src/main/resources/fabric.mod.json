@@ -18,17 +18,20 @@
     "issues": "https://github.com/Mineaurion/AurionChat/issues"
   },
   "license": "MIT",
-  "icon": "assets/economy/icon.png",
+  "icon": "assets/aurioneconomy/icon.png",
   "environment": "server",
   "entrypoints": {
     "server": [
-      "com.mineaurion.aurioneconomy.fabric.Economy"
+      "com.mineaurion.aurioneconomy.fabric.Bootstrap"
     ]
   },
+  "mixins": [
+    "aurioneconomy.mixins.json"
+  ],
   "depends": {
-    "fabricloader": ">=0.14.17",
-    "fabric": "*",
-    "minecraft": ">=1.19.2",
-    "completeconfig": ">=2.1.0"
+    "fabricloader": ">=0.9.0",
+    "fabric-api-base": "*",
+    "fabric-command-api-v2": "*",
+    "fabric-lifecycle-events-v1": "*"
   }
 }
