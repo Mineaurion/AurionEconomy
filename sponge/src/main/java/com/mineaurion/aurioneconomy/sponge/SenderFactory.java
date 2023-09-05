@@ -45,19 +45,6 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
     }
 
     @Override
-    protected void performCommand(Audience source, String command) {
-        if(!(source instanceof Subject)){
-            throw new IllegalStateException("Source is not a subject");
-        }
-
-        try{
-            getPlugin().getBootstrap().getGame().server().commandManager().process(((Subject) source), source, command);
-        } catch (Exception e){
-            // do nothing
-        }
-    }
-
-    @Override
     protected boolean isConsole(Audience sender) {
         return sender instanceof SystemSubject;
     }

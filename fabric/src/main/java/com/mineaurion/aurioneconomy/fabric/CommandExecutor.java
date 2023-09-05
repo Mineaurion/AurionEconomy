@@ -36,7 +36,6 @@ public class CommandExecutor extends BrigadierCommandManager<ServerCommandSource
         });
     }
 
-
     @Override
     public Sender getSender(ServerCommandSource source) {
         return this.plugin.getSenderFactory().wrap(source);

@@ -56,7 +56,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     protected void registerCommands() {
         PluginCommand command = this.bootstrap.getCommand("money");
         if(command == null){
-            getLogger().severe("Unable to register /economy command with the server");
+            getLogger().severe("Unable to register /money command with the server");
             return;
         }
 
@@ -73,11 +73,6 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public Optional<UUID> lookupUUID(String username) {
         return Optional.ofNullable(getServer().getOfflinePlayer(username)).map(OfflinePlayer::getUniqueId);
-    }
-
-    @Override
-    public Optional<String> lookupUsername(UUID uuid) {
-        return Optional.ofNullable(getServer().getOfflinePlayer(uuid)).map(OfflinePlayer::getName);
     }
 
     @Override

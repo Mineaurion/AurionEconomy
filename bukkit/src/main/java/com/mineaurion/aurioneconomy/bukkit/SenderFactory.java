@@ -44,11 +44,6 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
     }
 
     @Override
-    protected void performCommand(CommandSender sender, String command) {
-        getPlugin().getServer().dispatchCommand(sender, command);
-    }
-
-    @Override
     protected boolean isConsole(CommandSender sender) {
         return sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender;
     }

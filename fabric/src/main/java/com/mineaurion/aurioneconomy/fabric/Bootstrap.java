@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.fabric;
 
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.plugin.scheduler.SchedulerAdapter;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -22,7 +23,7 @@ public class Bootstrap implements AurionEconomyBootstrap, DedicatedServerModInit
     private MinecraftServer server;
 
     public Bootstrap(){
-        this.loader = FabricLoader.getInstance().getModContainer("aurioneconomy").orElseThrow(() -> new RuntimeException("Could not get the AurionEconomy mod container"));
+        this.loader = FabricLoader.getInstance().getModContainer(AurionEconomyPlugin.MOD_ID).orElseThrow(() -> new RuntimeException("Could not get the " + AurionEconomyPlugin.MOD_ID + " mod container"));
         this.schedulerAdapter = new FabricSchedulerAdapter(this);
     }
 
@@ -41,7 +42,7 @@ public class Bootstrap implements AurionEconomyBootstrap, DedicatedServerModInit
 
     @Override
     public Path getDataDirectory() {
-        return FabricLoader.getInstance().getGameDir().resolve("mods").resolve("aurioneconomy");
+        return FabricLoader.getInstance().getGameDir().resolve("mods").resolve(AurionEconomyPlugin.MOD_ID);
     }
 
 

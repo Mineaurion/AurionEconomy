@@ -17,9 +17,6 @@ public abstract class DummyConsoleSender implements Sender {
     }
 
     @Override
-    public void performCommand(String commandLine) {}
-
-    @Override
     public boolean isConsole() {
         return true;
     }

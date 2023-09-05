@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin {
-
     private Storage storage;
 
     private final PluginLogger logger;
@@ -22,7 +21,7 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
     }
 
     public final void enable(){
-        logger.info("Economy Starting");
+        logger.info(AurionEconomyPlugin.NAME + " starting");
 
         setupSenderFactory();
 
@@ -76,7 +75,6 @@ public abstract class AbstractAurionEconomyPlugin implements AurionEconomyPlugin
     protected abstract void registerCommands();
 
     public abstract Optional<UUID> lookupUUID(String username);
-    public abstract Optional<String> lookupUsername(UUID uuid);
 
     @Override
     public PluginLogger getLogger() {

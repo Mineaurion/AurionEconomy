@@ -1,7 +1,6 @@
 package com.mineaurion.aurioneconomy.forge;
 
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
-import com.mojang.brigadier.ParseResults;
 import net.kyori.adventure.text.Component;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -43,12 +42,6 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
     protected boolean hasPermission(CommandSourceStack sender, String permission) {
         // If admin permission we check if the sender is OP
         return permission.contains("admin") ? sender.hasPermission(4) : sender.hasPermission(0);
-    }
-
-    @Override
-    protected void performCommand(CommandSourceStack sender, String command) {
-        ParseResults<CommandSourceStack> results = sender.getServer().getCommands().getDispatcher().parse(command, sender);
-        sender.getServer().getCommands().performCommand(results, command);
     }
 
     @Override

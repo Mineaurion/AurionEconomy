@@ -3,6 +3,7 @@ package com.mineaurion.aurioneconomy.forge;
 import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.logger.Log4jPluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mojang.authlib.GameProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -26,7 +27,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     private CommandExecutor commandManager;
 
     public AurionEconomy(Bootstrap bootstrap){
-        super(new Log4jPluginLogger(LogManager.getLogger("AurionEconomy")));
+        super(new Log4jPluginLogger(LogManager.getLogger(AurionEconomyPlugin.NAME)));
         this.bootstrap = bootstrap;
     }
 
@@ -61,17 +62,12 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     public ConfigurationAdapter getConfigurationAdapter() {
-        return new ForgeConfigAdapter(this, resolveConfig("aurioneconomy.conf"));
+        return new ForgeConfigAdapter(this, resolveConfig(AurionEconomyPlugin.MOD_ID + ".conf"));
     }
 
     @Override
     public Optional<UUID> lookupUUID(String username) {
         return bootstrap.getServer().map(MinecraftServer::getProfileCache).flatMap(profileCache -> profileCache.get(username)).map(GameProfile::getId);
-    }
-
-    @Override
-    public Optional<String> lookupUsername(UUID uuid) {
-        return bootstrap.getServer().map(MinecraftServer::getProfileCache).flatMap(gameProfileCache -> gameProfileCache.get(uuid)).map(GameProfile::getName);
     }
 
     @Override

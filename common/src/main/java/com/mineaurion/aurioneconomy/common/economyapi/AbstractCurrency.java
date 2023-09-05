@@ -1,5 +1,7 @@
 package com.mineaurion.aurioneconomy.common.economyapi;
 
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
+
 public abstract class AbstractCurrency {
     private String singular;
     private String plural;
@@ -16,7 +18,7 @@ public abstract class AbstractCurrency {
     }
 
     public String getId(){
-        return "aurioneconomy:" + getSingular();
+        return AurionEconomyPlugin.MOD_ID + ":" + getSingular();
     }
 
     public String getSingular() {

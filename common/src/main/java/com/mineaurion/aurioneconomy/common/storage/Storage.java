@@ -21,10 +21,6 @@ public class Storage {
         this.implementation = implementation;
     }
 
-    public StorageImplementation getImplementation(){
-        return this.implementation;
-    }
-
     public <T> CompletableFuture<T> future(Callable<T> supplier){
         return CompletableFuture.supplyAsync(() -> {
             try {

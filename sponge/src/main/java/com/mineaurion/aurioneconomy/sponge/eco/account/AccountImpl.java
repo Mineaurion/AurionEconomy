@@ -24,9 +24,7 @@ import java.util.concurrent.CompletionException;
 public class AccountImpl implements Account, UniqueAccount {
     private final UUID uuid;
     protected boolean isVirtual;
-
     private final AurionEconomy plugin;
-
     private final CurrencyImpl currency;
 
 
@@ -36,8 +34,7 @@ public class AccountImpl implements Account, UniqueAccount {
         this.uuid = uuid;
         this.isVirtual = false;
     }
-
-
+    
     @Override
     public Component displayName() {
         return Component.text(uuid.toString());

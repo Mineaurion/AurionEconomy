@@ -59,18 +59,8 @@ public class AbstractSender<T> implements Sender {
     }
 
     @Override
-    public void performCommand(String commandLine) {
-        this.factory.performCommand(this.sender, commandLine);
-    }
-
-    @Override
     public boolean isConsole() {
         return this.isConsole;
-    }
-
-    @Override
-    public boolean isValid() {
-        return isConsole();
     }
 
     @Override

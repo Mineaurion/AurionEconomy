@@ -11,6 +11,10 @@ import java.util.UUID;
 
 public interface AurionEconomyPlugin {
 
+    String MOD_ID = "aurioneconomy";
+
+    String NAME = "AurionEconomy";
+
     AurionEconomyBootstrap getBootstrap();
 
     PluginLogger getLogger();
@@ -20,7 +24,9 @@ public interface AurionEconomyPlugin {
     ConfigurationAdapter getConfigurationAdapter();
 
     Optional<UUID> lookupUUID(String username);
-    Optional<String> lookupUsername(UUID uuid);
+
+    // Not needed for now
+    // Optional<String> lookupUsername(UUID uuid);
 
     Collection<String> getPlayersList();
 

@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.bukkit.vault;
 
 import com.mineaurion.aurioneconomy.bukkit.AurionEconomy;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.storage.Storage;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -31,7 +32,7 @@ public class VaultConnector implements Economy {
 
     @Override
     public String getName() {
-        return "aurioneconomy";
+        return AurionEconomyPlugin.MOD_ID;
     }
 
     @Override

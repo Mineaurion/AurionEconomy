@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.forge;
 
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -39,7 +40,7 @@ public class Bootstrap implements AurionEconomyBootstrap {
         markAsNotRequiredClientSide();
 
         if(FMLEnvironment.dist.isClient()){
-            System.out.println("Skipping AurionEconomy init (not supported on the client");
+            System.out.println("Skipping " + AurionEconomyPlugin.NAME + " init (not supported on the client");
             return;
         }
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
@@ -49,15 +50,12 @@ public class Bootstrap implements AurionEconomyBootstrap {
     }
 
     public void onCommonSetup(FMLCommonSetupEvent event){
-        // this.plugin.enable();
         MinecraftForge.EVENT_BUS.register(this);
         this.plugin.registerEarlyListeners();
-        System.out.println("J'ai register les premiers listeners");
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onServerAboutToStart(ServerStartingEvent event){
-        System.out.println("Je start");
         this.server = event.getServer();
         this.plugin.enable();
     }
@@ -75,7 +73,7 @@ public class Bootstrap implements AurionEconomyBootstrap {
 
     @Override
     public Path getDataDirectory() {
-        return FMLPaths.CONFIGDIR.get().resolve("aurioneconomy").toAbsolutePath();
+        return FMLPaths.CONFIGDIR.get().resolve(AurionEconomyPlugin.MOD_ID).toAbsolutePath();
     }
 
     public void registerListeners(Object target){

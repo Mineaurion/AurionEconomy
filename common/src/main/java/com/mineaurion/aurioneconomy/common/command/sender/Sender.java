@@ -21,11 +21,5 @@ public interface Sender {
 
     boolean hasPermission(String permission);
 
-    void performCommand(String commandLine);
-
     boolean isConsole();
-
-    default boolean isValid(){
-        return true;
-    }
 }

@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.common.locale;
 
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -17,7 +18,7 @@ public interface Message {
             .append(text('['))
             .append(text()
                     .decoration(BOLD, true)
-                    .append(text("ECONOMY", AQUA))
+                    .append(text(AurionEconomyPlugin.NAME, AQUA))
             )
             .append(text(']'))
             .build();

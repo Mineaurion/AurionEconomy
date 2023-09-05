@@ -22,7 +22,7 @@ public abstract class SenderFactory<P extends AurionEconomyPlugin, T> implements
     protected abstract String getName(T sender);
     protected abstract void sendMessage(T sender, Component message);
     protected abstract boolean hasPermission(T sender, String permission);
-    protected abstract void performCommand(T sender, String command);
+
     protected abstract boolean isConsole(T sender);
 
     public final Sender wrap(T sender){

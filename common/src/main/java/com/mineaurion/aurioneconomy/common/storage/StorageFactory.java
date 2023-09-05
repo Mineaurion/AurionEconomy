@@ -49,7 +49,7 @@ public class StorageFactory {
         System.out.println(cfg.getString("data.address", "test"));
         return new StorageCredentials(
                 cfg.getString("data.address", "localhost"),
-                cfg.getString("data.database", "aurioneconomy"),
+                cfg.getString("data.database", AurionEconomyPlugin.MOD_ID),
                 cfg.getString("data.username", "root"),
                 cfg.getString("data.password", "root"),
                 maxPoolSize, minIdle, maxLifeTime, keepAliveTime, connectionTimeout, props

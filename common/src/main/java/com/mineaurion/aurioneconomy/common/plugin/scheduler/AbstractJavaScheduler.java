@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.common.plugin.scheduler;
 
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public abstract class AbstractJavaScheduler implements SchedulerAdapter {
 
         this.scheduler = new ScheduledThreadPoolExecutor(1, r -> {
             Thread thread = Executors.defaultThreadFactory().newThread(r);
-            thread.setName("economy-scheduler");
+            thread.setName(AurionEconomyPlugin.MOD_ID + "-scheduler");
             return thread;
         });
         this.scheduler.setRemoveOnCancelPolicy(true);
@@ -53,8 +54,8 @@ public abstract class AbstractJavaScheduler implements SchedulerAdapter {
         try {
             if(!this.scheduler.awaitTermination(1, TimeUnit.MINUTES)) {
                 //TODO: better logging
-                System.out.println("Timed out waiting for Economy scheduler to terminate");
-                reportRunningTasks(thread -> thread.getName().equals("economy-scheduler"));
+                System.out.println("Timed out waiting for " + AurionEconomyPlugin.NAME + " scheduler to terminate");
+                reportRunningTasks(thread -> thread.getName().equals(AurionEconomyPlugin.MOD_ID + "-scheduler"));
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -66,8 +67,8 @@ public abstract class AbstractJavaScheduler implements SchedulerAdapter {
         this.worker.shutdown();
         try {
             if(!this.worker.awaitTermination(1, TimeUnit.MINUTES)){
-                System.out.println("Timed out waiting for Economy worker thread pool to terminate");
-                reportRunningTasks(thread -> thread.getName().startsWith("economy-worker-"));
+                System.out.println("Timed out waiting for " + AurionEconomyPlugin.NAME + " worker thread pool to terminate");
+                reportRunningTasks(thread -> thread.getName().startsWith(AurionEconomyPlugin.MOD_ID + "-worker-"));
             }
         } catch (InterruptedException e){
             e.printStackTrace();
@@ -89,7 +90,7 @@ public abstract class AbstractJavaScheduler implements SchedulerAdapter {
         public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
             ForkJoinWorkerThread thread = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
             thread.setDaemon(true);
-            thread.setName("economy-worker-" + COUNT.getAndIncrement());
+            thread.setName(AurionEconomyPlugin.MOD_ID + "-worker-" + COUNT.getAndIncrement());
             return thread;
         }
     }

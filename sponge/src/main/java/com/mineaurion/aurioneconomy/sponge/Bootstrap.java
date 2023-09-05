@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.mineaurion.aurioneconomy.common.logger.Log4jPluginLogger;
 import com.mineaurion.aurioneconomy.common.logger.PluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
@@ -22,7 +23,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@Plugin("aurioneconomy")
+@Plugin(AurionEconomyPlugin.MOD_ID)
 public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
 
     private final Injector injector;
@@ -75,7 +76,7 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
 
     @Override
     public Path getDataDirectory() {
-        Path dataDirectory = this.game.gameDirectory().toAbsolutePath().resolve("aurioneconomy");
+        Path dataDirectory = this.game.gameDirectory().toAbsolutePath().resolve(AurionEconomyPlugin.MOD_ID);
         try {
             createDirectoriesIfNotExists(dataDirectory);
         } catch (IOException e){
@@ -101,6 +102,6 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
     }
 
     public PluginLogger getLogger() {
-        return new Log4jPluginLogger(LogManager.getLogger("AurionEconomy"));
+        return new Log4jPluginLogger(LogManager.getLogger(AurionEconomyPlugin.NAME));
     }
 }

@@ -2,6 +2,7 @@ package com.mineaurion.aurioneconomy.sponge;
 
 import com.mineaurion.aurioneconomy.common.config.ConfigurationAdapter;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
+import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.sponge.eco.EconomyService;
 import com.mineaurion.aurioneconomy.sponge.eco.TransactionResultImpl;
 import net.kyori.adventure.text.Component;
@@ -12,7 +13,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
 import org.spongepowered.api.event.lifecycle.RegisterBuilderEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
-import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.plugin.PluginContainer;
 
 import java.io.IOException;
@@ -38,8 +38,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     }
 
     @Override
-    protected void registerPlatformListeners() {
-    }
+    protected void registerPlatformListeners() {}
 
     @Listener
     public void onRegisterServer(final ProvideServiceEvent<EconomyService> event){
@@ -92,11 +91,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     }
 
     private Path resolveConfig() {
-        Path path = this.bootstrap.getConfigDirectory().resolve("aurioneconomy.conf");
+        Path path = this.bootstrap.getConfigDirectory().resolve(AurionEconomyPlugin.MOD_ID + ".conf");
         if (!Files.exists(path)) {
             try {
                 Bootstrap.createDirectoriesIfNotExists(this.bootstrap.getConfigDirectory());
-                try (InputStream is = getClass().getClassLoader().getResourceAsStream("aurioneconomy.conf")) {
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream(AurionEconomyPlugin.MOD_ID + ".conf")) {
                     Files.copy(is, path);
                 }
             } catch (IOException e) {
@@ -110,15 +109,6 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     public Optional<UUID> lookupUUID(String username) {
         return getServer().flatMap(server -> server.gameProfileManager().profile(username)
                 .thenApply(p -> Optional.of(p.uniqueId()))
-                .exceptionally(x -> Optional.empty())
-                .join()
-        );
-    }
-
-    @Override
-    public Optional<String> lookupUsername(UUID uuid) {
-        return getServer().flatMap(server -> server.gameProfileManager().profile(uuid)
-                .thenApply(GameProfile::name)
                 .exceptionally(x -> Optional.empty())
                 .join()
         );

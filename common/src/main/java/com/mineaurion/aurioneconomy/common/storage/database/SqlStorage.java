@@ -18,14 +18,12 @@ public class SqlStorage implements StorageImplementation {
     private static final String USER_ACCOUNT_CREATE = "INSERT INTO '{prefix}account' (uuid, balance) VALUES(?,?)";
     private static final String USER_ACCOUNT_SELECT = "SELECT uuid, balance FROM '{prefix}account' WHERE uuid= ?";
     private static final String USER_ACCOUNT_SET = "UPDATE '{prefix}account' SET balance=? WHERE uuid=?";
-
     private static final String USER_ACCOUNT_SELECT_ALL = "SELECT uuid, balance FROM '{prefix}account'";
 
     private static final String ACTION_INSERT = "INSERT INTO '{prefix}actions' (time, actor_uuid, actor_name, type, acted_uuid, acted_name, action) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String ACTION_SELECT_ALL = "SELECT * FROM '{prefix}actions'";
 
     private final AurionEconomyPlugin plugin;
-
     private final ConnectionFactory connectionFactory;
     private final Function<String, String> statementProcessor;
 
@@ -43,14 +41,6 @@ public class SqlStorage implements StorageImplementation {
     @Override
     public String getImplementationName() {
         return this.connectionFactory.getImplementationName();
-    }
-
-    public ConnectionFactory getConnectionFactory(){
-        return this.connectionFactory;
-    }
-
-    public Function<String, String> getStatementProcessor(){
-        return this.statementProcessor;
     }
 
     @Override
@@ -115,8 +105,7 @@ public class SqlStorage implements StorageImplementation {
         try {
             this.connectionFactory.shutdown();
         } catch (Exception e) {
-            // TODO: better log
-            System.out.println("Exception whilst disable SQL Storage");
+            this.plugin.getLogger().severe("Exception whilst disable SQL Storage");
         }
     }
 

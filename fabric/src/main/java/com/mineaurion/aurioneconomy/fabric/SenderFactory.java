@@ -45,11 +45,6 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
     }
 
     @Override
-    protected void performCommand(ServerCommandSource sender, String command) {
-        sender.getServer().getCommandManager().executeWithPrefix(sender, command);
-    }
-
-    @Override
     protected boolean isConsole(ServerCommandSource sender) {
         CommandOutput output = ((ServerCommandSourceAccessor) sender).getOutput();
         return output == sender.getServer() || // console

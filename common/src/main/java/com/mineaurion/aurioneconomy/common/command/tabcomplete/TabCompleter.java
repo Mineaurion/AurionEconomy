@@ -17,9 +17,7 @@ public class TabCompleter {
     private final Map<Integer, CompletionSupplier> suppliers = new HashMap<>();
     private int from = Integer.MAX_VALUE;
 
-    private TabCompleter() {
-
-    }
+    private TabCompleter() {}
 
     /**
      * Marks that the given completion supplier should be used to compute tab
@@ -67,7 +65,6 @@ public class TabCompleter {
         if (position >= this.from) {
             return this.suppliers.get(this.from).supplyCompletions(partial);
         }
-
         return this.suppliers.getOrDefault(position, empty -> Collections.emptyList()).supplyCompletions(partial);
     }
 

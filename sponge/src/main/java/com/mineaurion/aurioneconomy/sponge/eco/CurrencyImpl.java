@@ -2,10 +2,11 @@ package com.mineaurion.aurioneconomy.sponge.eco;
 
 import com.mineaurion.aurioneconomy.common.economyapi.AbstractCurrency;
 import net.kyori.adventure.text.Component;
+import org.spongepowered.api.service.economy.Currency;
 
 import java.math.BigDecimal;
 
-public class CurrencyImpl extends AbstractCurrency implements org.spongepowered.api.service.economy.Currency {
+public class CurrencyImpl extends AbstractCurrency implements Currency {
 
     public CurrencyImpl(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurrency){
         super(
