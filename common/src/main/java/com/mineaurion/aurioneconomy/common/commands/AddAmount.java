@@ -5,6 +5,9 @@ import com.mineaurion.aurioneconomy.common.command.SingleCommand;
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.Predicates;
+import com.mineaurion.aurioneconomy.common.model.Subject;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
+import com.mineaurion.aurioneconomy.common.model.TransactionType;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.util.ArrayList;
@@ -29,7 +32,14 @@ public class AddAmount extends SingleCommand {
         if(playerUUID.isPresent()){
             int amount = Integer.parseInt(args.get(2));
             String username = args.get(1);
-            plugin.getStorage().addMount(playerUUID.get(), amount).join();
+            Transaction transaction = new Transaction(
+                    sender,
+                    new Subject(username, playerUUID.get()),
+                    amount,
+                    TransactionType.ADD,
+                    ""
+            );
+            plugin.getStorage().addMount(transaction).join();
             Message.ADD_AMOUNT.send(sender, username, amount);
         } else {
             Message.PLAYER_NOT_FOUND.send(sender, args.get(1));

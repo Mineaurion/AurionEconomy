@@ -2,6 +2,9 @@ package com.mineaurion.aurioneconomy.bukkit.vault;
 
 import com.mineaurion.aurioneconomy.bukkit.AurionEconomy;
 import com.mineaurion.aurioneconomy.common.economyapi.Currency;
+import com.mineaurion.aurioneconomy.common.model.Subject;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
+import com.mineaurion.aurioneconomy.common.model.TransactionType;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.storage.Storage;
 import net.milkbowl.vault.economy.Economy;
@@ -132,19 +135,36 @@ public class VaultConnector implements Economy {
 
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
-        //TODO: get caller of the method to get the plugin name ? for the log
         double balance = getBalance(playerName);
         if(balance < amount){
             return new EconomyResponse(0, balance, ResponseType.FAILURE, "Insufficient funds");
         }
         double newBalance = balance - amount;
+        if(newBalance <= 0){
+            return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error newer balance need to be > 0");
+        }
+
         UUID uuid = this.plugin.lookupUUID(playerName).get();
 
+        //TODO: get caller of the method to get the plugin name ? for the log instead of putting null in it
         //TODO: need to be removed - debug purpose
         for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
             System.out.println(ste + "\n");
         }
-        return setBalance(uuid, newBalance, amount);
+
+        try {
+            Transaction transaction = new Transaction(
+                    new Subject("Vault", null),
+                    new Subject(playerName, uuid),
+                    (int) amount,
+                    TransactionType.WITHDRAW,
+                    ""
+            );
+            this.storage.withdrawAmount(transaction);
+            return new EconomyResponse(amount, newBalance, ResponseType.SUCCESS, null);
+        } catch (CompletionException e){
+            return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error Mysql");
+        }
     }
 
     @Override
@@ -167,7 +187,25 @@ public class VaultConnector implements Economy {
         double balance = getBalance(playerName);
         double newBalance = balance - amount;
         UUID uuid = this.plugin.lookupUUID(playerName).get();
-        return setBalance(uuid, newBalance, amount);
+
+        if(newBalance <= 0){
+            return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error newer balance need to be > 0");
+        }
+
+        //TODO: get caller of the method to get the plugin name ? for the log instead of putting null in it
+        try {
+            Transaction transaction = new Transaction(
+                    new Subject("Vault", null),
+                    new Subject(playerName, uuid),
+                    (int) amount,
+                    TransactionType.ADD,
+                    ""
+            );
+            this.storage.addMount(transaction);
+            return new EconomyResponse(amount, newBalance, ResponseType.SUCCESS, null);
+        } catch (CompletionException e){
+            return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error Mysql");
+        }
     }
 
     @Override
@@ -263,18 +301,5 @@ public class VaultConnector implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer player, String worldName) {
         return hasAccount(player);
-    }
-
-    private EconomyResponse setBalance(UUID uuid, double newBalance, double amount){
-        if(newBalance >= 0){
-            try {
-                this.storage.setAmount(uuid, (int) newBalance).join();
-                return new EconomyResponse(amount, newBalance, ResponseType.SUCCESS, null);
-            } catch (CompletionException e){
-                return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error Mysql");
-            }
-        } else {
-            return new EconomyResponse(0, newBalance, ResponseType.FAILURE, "Error newer balance need to be > 0");
-        }
     }
 }

@@ -13,6 +13,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ProvideServiceEvent;
 import org.spongepowered.api.event.lifecycle.RegisterBuilderEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
+import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.plugin.PluginContainer;
 
 import java.io.IOException;
@@ -107,6 +108,14 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     public Optional<UUID> lookupUUID(String username) {
         return getServer().flatMap(server -> server.gameProfileManager().profile(username)
                 .thenApply(p -> Optional.of(p.uniqueId()))
+                .exceptionally(x -> Optional.empty())
+                .join()
+        );
+    }
+
+    public Optional<String> lookupUsername(UUID uniqueId) {
+        return getServer().flatMap(server -> server.gameProfileManager().profile(uniqueId)
+                .thenApply(GameProfile::name)
                 .exceptionally(x -> Optional.empty())
                 .join()
         );

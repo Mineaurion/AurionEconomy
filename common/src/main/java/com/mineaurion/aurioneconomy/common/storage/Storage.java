@@ -2,6 +2,7 @@ package com.mineaurion.aurioneconomy.common.storage;
 
 import com.mineaurion.aurioneconomy.common.misc.Throwing;
 import com.mineaurion.aurioneconomy.common.model.Account;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.storage.database.StorageImplementation;
 
@@ -86,16 +87,33 @@ public class Storage {
         return future(() -> this.implementation.getBalance(uuid));
     }
 
-    public CompletableFuture<Void> addMount(UUID uuid, int amount){
-        return future(() -> this.implementation.addAmount(uuid, amount));
+    public CompletableFuture<Void> addMount(Transaction transaction){
+        return future(() -> {
+            this.implementation.addAmount(transaction.getReceiver().getUUID(), transaction.getAmount());
+            this.implementation.addTransactions(transaction);
+        });
     }
 
-    public CompletableFuture<Void> setAmount(UUID uuid, int amount){
-        return future(() -> this.implementation.setAmount(uuid, amount));
+    public CompletableFuture<Void> setAmount(Transaction transaction){
+        return future(() -> {
+            this.implementation.setAmount(transaction.getReceiver().getUUID(), transaction.getAmount());
+            this.implementation.addTransactions(transaction);
+        });
     }
 
-    public CompletableFuture<Void> withdrawAmount(UUID uuid, int amount){
-        return future(() -> this.implementation.withdrawAmount(uuid, amount));
+    public CompletableFuture<Void> withdrawAmount(Transaction transaction){
+        return future(() -> {
+            this.implementation.withdrawAmount(transaction.getReceiver().getUUID(), transaction.getAmount());
+            this.implementation.addTransactions(transaction);
+        });
+    }
+
+    public CompletableFuture<Void> playerToPlayer(Transaction transaction){
+        return future(() -> {
+            this.implementation.withdrawAmount(transaction.getSender().getUUID(), transaction.getAmount());
+            this.implementation.addAmount(transaction.getReceiver().getUUID(), transaction.getAmount());
+            this.implementation.addTransactions(transaction);
+        });
     }
 
     public CompletableFuture<Boolean> checkHasEnough(UUID uuid, int amount){

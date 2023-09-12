@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.common.storage.database;
 
 import com.mineaurion.aurioneconomy.common.model.Account;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.io.IOException;
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 
 public class SqlStorage implements StorageImplementation {
 
-    private static final String USER_ACCOUNT_CREATE = "INSERT INTO '{prefix}account' (uuid, balance) VALUES(?,?)";
-    private static final String USER_ACCOUNT_SELECT = "SELECT uuid, balance FROM '{prefix}account' WHERE uuid= ?";
-    private static final String USER_ACCOUNT_SET = "UPDATE '{prefix}account' SET balance=? WHERE uuid=?";
-    private static final String USER_ACCOUNT_SELECT_ALL = "SELECT uuid, balance FROM '{prefix}account'";
+    private static final String USER_ACCOUNT_CREATE = "INSERT INTO '{prefix}accounts' (uuid, balance) VALUES(?,?)";
+    private static final String USER_ACCOUNT_SELECT = "SELECT uuid, balance FROM '{prefix}accounts' WHERE uuid= ?";
+    private static final String USER_ACCOUNT_SET = "UPDATE '{prefix}accounts' SET balance=? WHERE uuid=?";
+    private static final String USER_ACCOUNT_SELECT_ALL = "SELECT uuid, balance FROM '{prefix}accounts'";
 
-    private static final String ACTION_INSERT = "INSERT INTO '{prefix}actions' (time, actor_uuid, actor_name, type, acted_uuid, acted_name, action) VALUES(?, ?, ?, ?, ?, ?, ?)";
-    private static final String ACTION_SELECT_ALL = "SELECT * FROM '{prefix}actions'";
+    private static final String TRANSACTIONS_INSERT = "INSERT INTO '{prefix}transactions' (time, sender_name, sender_uuid, receiver_name, receiver_uuid, amount, type, comments) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String TRANSACTIONS_SELECT = "SELECT * FROM '{prefix}transactions'";
 
     private final AurionEconomyPlugin plugin;
     private final ConnectionFactory connectionFactory;
@@ -187,6 +188,23 @@ public class SqlStorage implements StorageImplementation {
             }
         }
         return accounts;
+    }
+
+    @Override
+    public void addTransactions(Transaction transaction) throws Exception {
+        try(Connection c = this.connectionFactory.getConnection()){
+            try(PreparedStatement ps = c.prepareStatement(this.statementProcessor.apply(TRANSACTIONS_INSERT))) {
+                ps.setDate(1, transaction.getDate());
+                ps.setString(2, transaction.getSender().getName());
+                ps.setString(3, transaction.getSender().getUUIDString());
+                ps.setString(4, transaction.getReceiver().getName());
+                ps.setString(5, transaction.getReceiver().getUUIDString());
+                ps.setInt(6, transaction.getAmount());
+                ps.setString(7, transaction.getType().toString());
+                ps.setString(8, transaction.getComments());
+                ps.execute();
+            }
+        }
     }
 
     private static boolean tableExists(Connection connection, String table) throws SQLException {

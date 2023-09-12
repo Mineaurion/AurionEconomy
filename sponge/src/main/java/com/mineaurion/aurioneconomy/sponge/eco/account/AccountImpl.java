@@ -1,5 +1,8 @@
 package com.mineaurion.aurioneconomy.sponge.eco.account;
 
+import com.mineaurion.aurioneconomy.common.model.Subject;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
+import com.mineaurion.aurioneconomy.common.model.TransactionType;
 import com.mineaurion.aurioneconomy.sponge.AurionEconomy;
 import com.mineaurion.aurioneconomy.sponge.eco.CurrencyImpl;
 import com.mineaurion.aurioneconomy.sponge.eco.TransactionResultImpl;
@@ -115,7 +118,14 @@ public class AccountImpl implements Account, UniqueAccount {
             }
 
             try {
-                plugin.getStorage().setAmount(uuid, amount.intValue()).join();
+                Transaction transaction = new Transaction(
+                        new Subject(null, null),
+                        new Subject(this.plugin.lookupUsername(uuid).orElse(""), uuid),
+                        amount.intValue(),
+                        TransactionType.SET,
+                        ""
+                );
+                plugin.getStorage().setAmount(transaction).join();
                 return result.setResultType(ResultType.SUCCESS).build();
             } catch (CompletionException e){
                 return result.setResultType(ResultType.FAILED).build();

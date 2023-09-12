@@ -5,13 +5,15 @@ import com.mineaurion.aurioneconomy.common.command.SingleCommand;
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import com.mineaurion.aurioneconomy.common.locale.Message;
 import com.mineaurion.aurioneconomy.common.misc.Predicates;
+import com.mineaurion.aurioneconomy.common.model.Subject;
+import com.mineaurion.aurioneconomy.common.model.Transaction;
+import com.mineaurion.aurioneconomy.common.model.TransactionType;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class Pay extends SingleCommand {
 
@@ -28,6 +30,7 @@ public class Pay extends SingleCommand {
 
         UUID senderUUID = sender.getUUID();
         Optional<UUID> targetUUID = getPlayerUUID(plugin, args, 1);
+        String targetUsername = args.get(1);
         if(!targetUUID.isPresent()){
             Message.PLAYER_NOT_FOUND.send(sender, args.get(1));
             return;
@@ -41,10 +44,14 @@ public class Pay extends SingleCommand {
         int amount = Integer.parseInt(args.get(2));
 
         if(plugin.getStorage().checkHasEnough(senderUUID, amount).join()){
-            CompletableFuture.allOf(
-                    plugin.getStorage().withdrawAmount(senderUUID, amount),
-                    plugin.getStorage().addMount(targetUUID.get(), amount)
-            ).join();
+            Transaction transaction = new Transaction(
+                sender,
+                new Subject(targetUsername, targetUUID.get()),
+                    amount,
+                    TransactionType.PLAYER_TO_PLAYER,
+                    ""
+            );
+            plugin.getStorage().playerToPlayer(transaction).join();
             Message.PAY_SENDER.send(sender, amount, args.get(1));
             plugin.sendMessageToSpecificPlayer(targetUUID.get(), Message.PAY_TARGET.build(amount, sender.getName()));
         } else {
