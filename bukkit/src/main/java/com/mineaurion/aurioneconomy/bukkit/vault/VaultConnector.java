@@ -1,6 +1,7 @@
 package com.mineaurion.aurioneconomy.bukkit.vault;
 
 import com.mineaurion.aurioneconomy.bukkit.AurionEconomy;
+import com.mineaurion.aurioneconomy.common.economyapi.Currency;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mineaurion.aurioneconomy.common.storage.Storage;
 import net.milkbowl.vault.economy.Economy;
@@ -16,23 +17,23 @@ import java.util.concurrent.CompletionException;
 
 public class VaultConnector implements Economy {
 
-    public Currency currency;
-    private AurionEconomy plugin;
-    private Storage storage;
+    private final Currency currency;
+    private final AurionEconomy plugin;
+    private final Storage storage;
 
     public VaultConnector(AurionEconomy plugin){
-        this.currency = new Currency("Dollar", "Dollars", "$", 0, true);
+        this.currency = new Currency();
         this.plugin = plugin;
         this.storage = this.plugin.getStorage();
     }
     @Override
-    public boolean isEnabled() {
-        return false;
+    public String getName() {
+        return AurionEconomyPlugin.NAME;
     }
 
     @Override
-    public String getName() {
-        return AurionEconomyPlugin.MOD_ID;
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class VaultConnector implements Economy {
 
     @Override
     public int fractionalDigits() {
-        return 0;
+        return currency.getFractionDigits();
     }
 
     @Override
@@ -52,12 +53,12 @@ public class VaultConnector implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return currency.getPluralDisplayName();
+        return currency.getPlural();
     }
 
     @Override
     public String currencyNameSingular() {
-        return currency.getDisplayName();
+        return currency.getSingular();
     }
 
     @SuppressWarnings("deprecation")
@@ -111,7 +112,7 @@ public class VaultConnector implements Economy {
     @Override
     public boolean has(String playerName, double amount) {
         double balance = getBalance(playerName);
-        return balance > amount;
+        return (balance > amount);
     }
 
     @Override
@@ -133,12 +134,16 @@ public class VaultConnector implements Economy {
     public EconomyResponse withdrawPlayer(String playerName, double amount) {
         //TODO: get caller of the method to get the plugin name ? for the log
         double balance = getBalance(playerName);
-        if(has(playerName, amount)){
+        if(balance < amount){
             return new EconomyResponse(0, balance, ResponseType.FAILURE, "Insufficient funds");
         }
         double newBalance = balance - amount;
         UUID uuid = this.plugin.lookupUUID(playerName).get();
 
+        //TODO: need to be removed - debug purpose
+        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+            System.out.println(ste + "\n");
+        }
         return setBalance(uuid, newBalance, amount);
     }
 

@@ -1,21 +1,14 @@
 package com.mineaurion.aurioneconomy.sponge.eco;
 
-import com.mineaurion.aurioneconomy.common.economyapi.AbstractCurrency;
+import com.mineaurion.aurioneconomy.common.economyapi.Currency;
 import net.kyori.adventure.text.Component;
-import org.spongepowered.api.service.economy.Currency;
 
 import java.math.BigDecimal;
 
-public class CurrencyImpl extends AbstractCurrency implements Currency {
+public class CurrencyImpl extends Currency implements org.spongepowered.api.service.economy.Currency {
 
-    public CurrencyImpl(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurrency){
-        super(
-                singular,
-                plural,
-                symbol,
-                fractionDigits,
-                defaultCurrency
-        );
+    public CurrencyImpl(){
+        super();
     }
     @Override
     public Component displayName() {

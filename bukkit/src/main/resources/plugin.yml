@@ -1,4 +1,4 @@
-name: Economy
+name: AurionEconomy
 version: ${version}
 main: com.mineaurion.aurioneconomy.bukkit.Bootstrap
 authors: [Yann151924]

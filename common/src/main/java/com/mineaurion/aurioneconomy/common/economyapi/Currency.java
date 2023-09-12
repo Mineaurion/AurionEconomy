@@ -2,19 +2,29 @@ package com.mineaurion.aurioneconomy.common.economyapi;
 
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 
-public abstract class AbstractCurrency {
+public class Currency {
     private String singular;
     private String plural;
     private String symbol;
     private int fractionDigits;
     private boolean defaultCurrency;
 
-    public AbstractCurrency(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurrency){
+    public Currency(String singular, String plural, String symbol, int fractionDigits, boolean defaultCurrency){
         this.singular = singular;
         this.plural = plural;
         this.symbol = symbol;
         this.fractionDigits = fractionDigits;
         this.defaultCurrency = defaultCurrency;
+    }
+
+    public Currency(){
+        this(
+                "Aurion",
+                "Aurions",
+                "A",
+                0,
+                true
+        );
     }
 
     public String getId(){

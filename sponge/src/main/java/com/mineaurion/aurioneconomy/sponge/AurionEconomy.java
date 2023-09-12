@@ -60,12 +60,10 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     public static final class RegisterCommandsListener {
         private final PluginContainer pluginContainer;
         private final Command.Raw command;
-
         RegisterCommandsListener(PluginContainer pluginContainer, Command.Raw command){
             this.pluginContainer = pluginContainer;
             this.command = command;
         }
-
         @Listener
         public void onCommandRegister(RegisterCommandEvent<Command.Raw> event){
             event.register(this.pluginContainer, this.command, "economy", "aurion", "money");

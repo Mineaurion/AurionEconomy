@@ -6,11 +6,13 @@ import com.mineaurion.aurioneconomy.common.logger.JavaPluginLogger;
 import com.mineaurion.aurioneconomy.common.plugin.AbstractAurionEconomyPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 
 import java.util.Collection;
@@ -35,21 +37,22 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     protected void registerPlatformListeners() {
         // this.bootstrap.getServer().getPluginManager().registerEvent();
-        if(!setupEconomy()){
-            // TODO: handle it better, this will cause an error when the command will be register
-            getLogger().severe("Disabled due to no Vault Dependency found");
-            getServer().getPluginManager().disablePlugin(this.bootstrap);
-        }
-    }
-
-    private boolean setupEconomy(){
+        // TODO: handle it better, this will cause an error when the command will be register
         if(getServer().getPluginManager().getPlugin("Vault") == null){
             getLogger().severe("Vault not found");
-            return false;
+            return;
         }
-        getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultConnector(this), this.bootstrap, ServicePriority.Highest);
+        getServer().getServicesManager().register(Economy.class, new VaultConnector(this), this.bootstrap, ServicePriority.Normal);
 
-        return true;
+        // TODO: maybe need a settings for enabling this
+        Collection<RegisteredServiceProvider<Economy>> econs = Bukkit.getPluginManager().getPlugin("Vault").getServer().getServicesManager().getRegistrations(Economy.class);
+        for (RegisteredServiceProvider<Economy> econ : econs) {
+            if (econ.getProvider().getName().equalsIgnoreCase("Essentials Economy")||
+                    econ.getProvider().getName().equalsIgnoreCase("EssentialsX Economy")) {
+                getLogger().info("Disabling Essentials - EssentialsX Economy");
+                getServer().getServicesManager().unregister(econ.getProvider());
+            }
+        }
     }
 
     @Override

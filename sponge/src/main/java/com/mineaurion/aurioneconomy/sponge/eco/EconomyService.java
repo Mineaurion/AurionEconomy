@@ -16,7 +16,7 @@ public class EconomyService implements org.spongepowered.api.service.economy.Eco
 
     public EconomyService(AurionEconomy plugin){
         this.plugin = plugin;
-        this.currency = new CurrencyImpl("Dollar", "Dollars", "$", 0, true);
+        this.currency = new CurrencyImpl();
     }
 
     @Override
