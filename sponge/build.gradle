@@ -49,11 +49,6 @@ dependencies {
 }
 
 shadowJar {
-
-    dependencies {
-        include(dependency('com.mineaurion.aurioneconomy:.*'))
-    }
-
     relocate 'org.slf4j', 'com.mineaurion.aurioneconomy.lib.slf4j'
     // relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
     relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'

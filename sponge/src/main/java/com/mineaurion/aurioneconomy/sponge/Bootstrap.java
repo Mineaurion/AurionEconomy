@@ -9,6 +9,7 @@ import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
@@ -34,6 +35,10 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
     private final PluginContainer pluginContainer;
 
     @Inject
+    @ConfigDir(sharedRoot = false)
+    private Path configDirectory;
+
+    @Inject
     public Bootstrap(Injector injector){
         this.injector = injector;
         this.game = injector.getInstance(Game.class);
@@ -57,10 +62,6 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
         this.plugin.disable();
     }
 
-    public Game getGame() {
-        return game;
-    }
-
     public PluginContainer getPluginContainer() {
         return pluginContainer;
     }
@@ -75,14 +76,8 @@ public class Bootstrap implements AurionEconomyBootstrap, Supplier<Injector> {
     }
 
     @Override
-    public Path getDataDirectory() {
-        Path dataDirectory = this.game.gameDirectory().toAbsolutePath().resolve(AurionEconomyPlugin.MOD_ID);
-        try {
-            createDirectoriesIfNotExists(dataDirectory);
-        } catch (IOException e){
-            getLogger().warn("Unable to create AurionEconomy directory", e);
-        }
-        return dataDirectory;
+    public Path getConfigDirectory() {
+        return configDirectory;
     }
 
     public Optional<Server> getServer() {

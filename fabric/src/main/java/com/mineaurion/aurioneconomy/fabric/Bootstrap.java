@@ -41,7 +41,7 @@ public class Bootstrap implements AurionEconomyBootstrap, DedicatedServerModInit
     }
 
     @Override
-    public Path getDataDirectory() {
+    public Path getConfigDirectory() {
         return FabricLoader.getInstance().getGameDir().resolve("mods").resolve(AurionEconomyPlugin.MOD_ID);
     }
 

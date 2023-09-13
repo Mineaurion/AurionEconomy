@@ -72,7 +72,7 @@ public class Bootstrap implements AurionEconomyBootstrap {
     }
 
     @Override
-    public Path getDataDirectory() {
+    public Path getConfigDirectory() {
         return FMLPaths.CONFIGDIR.get().resolve(AurionEconomyPlugin.MOD_ID).toAbsolutePath();
     }
 

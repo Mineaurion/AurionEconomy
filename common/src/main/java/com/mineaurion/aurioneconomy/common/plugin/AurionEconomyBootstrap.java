@@ -19,11 +19,7 @@ public interface AurionEconomyBootstrap {
      *
      * @return the platforms data folder
      */
-    Path getDataDirectory();
-
-    default Path getConfigDirectory(){
-        return getDataDirectory();
-    }
+    Path getConfigDirectory();
 
     default InputStream getResourceStream(String path){
         return getClass().getClassLoader().getResourceAsStream(path);

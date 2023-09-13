@@ -32,7 +32,7 @@ public class Bootstrap extends JavaPlugin implements AurionEconomyBootstrap {
     }
 
     @Override
-    public Path getDataDirectory() {
+    public Path getConfigDirectory() {
         return getDataFolder().toPath().toAbsolutePath();
     }
 }

@@ -24,7 +24,7 @@ dependencies {
     apiModules.forEach {
         modImplementation(fabricApi.module(it, '0.83.1+1.20.1'))
     }
-    implementation project(':common')
+    shadow project(':common')
 }
 
 processResources {
@@ -55,9 +55,9 @@ java {
 
 shadowJar {
     configurations = [project.configurations.shadow]
+
     dependencies {
         exclude('net.fabricmc:.*')
-        include(dependency('com.mineaurion:.*'))
         // We don't want to include the mappings in the jar do we?
         exclude '/mappings/*'
     }
