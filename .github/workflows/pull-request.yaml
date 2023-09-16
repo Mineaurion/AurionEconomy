@@ -5,8 +5,4 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/build
-        name: Build
+    uses: ./.github/workflows/build.yaml

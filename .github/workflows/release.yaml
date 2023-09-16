@@ -5,12 +5,14 @@ on:
       - 'v*'
 
 jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
   release:
+    needs:
+      - build
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/build
-        name: Build
       - uses: actions/download-artifact@v3
         with:
           path: build
