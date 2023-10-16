@@ -5,12 +5,12 @@ import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class CommandExecutor extends BrigadierCommandManager<CommandSourceStack> {
+public class CommandExecutor extends BrigadierCommandManager<CommandSource> {
 
     private final AurionEconomy plugin;
 
@@ -22,8 +22,8 @@ public class CommandExecutor extends BrigadierCommandManager<CommandSourceStack>
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event){
         for(String alias: COMMAND_ALIASES){
-            LiteralCommandNode<CommandSourceStack> command = Commands.literal(alias).executes(this).build();
-            ArgumentCommandNode<CommandSourceStack, String> arguments = Commands.argument("args", StringArgumentType.greedyString())
+            LiteralCommandNode<CommandSource> command = Commands.literal(alias).executes(this).build();
+            ArgumentCommandNode<CommandSource, String> arguments = Commands.argument("args", StringArgumentType.greedyString())
                     .suggests(this)
                     .executes(this)
                     .build();
@@ -33,7 +33,7 @@ public class CommandExecutor extends BrigadierCommandManager<CommandSourceStack>
     }
 
     @Override
-    public Sender getSender(CommandSourceStack source) {
+    public Sender getSender(CommandSource source) {
         return this.plugin.getSenderFactory().wrap(source);
     }
 

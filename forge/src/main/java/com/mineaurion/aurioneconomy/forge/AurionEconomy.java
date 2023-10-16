@@ -7,9 +7,11 @@ import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mojang.authlib.GameProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.PlayerList;
+import net.minecraft.server.management.PlayerList;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ITextComponent;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.Collection;
@@ -67,7 +69,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     public Optional<UUID> lookupUUID(String username) {
-        return bootstrap.getServer().map(MinecraftServer::getProfileCache).flatMap(profileCache -> profileCache.get(username)).map(GameProfile::getId);
+        return bootstrap.getServer().map(MinecraftServer::getProfileCache).flatMap(profileCache -> Optional.ofNullable(profileCache.get(username))).map(GameProfile::getId);
     }
 
     @Override
@@ -81,11 +83,11 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     public void sendMessageToSpecificPlayer(UUID uuid, Component message) {
-        Optional<ServerPlayer> player = getBootstrap().getServer().map(MinecraftServer::getPlayerList).map(playerList -> playerList.getPlayer(uuid));
-        player.ifPresent(p -> p.sendSystemMessage(toNativeText(message)));
+        Optional<ServerPlayerEntity> player = getBootstrap().getServer().map(MinecraftServer::getPlayerList).map(playerList -> playerList.getPlayer(uuid));
+        player.ifPresent(p -> p.sendMessage(toNativeText(message), Util.NIL_UUID));
     }
 
-    public static net.minecraft.network.chat.Component toNativeText(Component component){
-        return net.minecraft.network.chat.Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(component));
+    public static ITextComponent toNativeText(Component component) {
+        return ITextComponent.Serializer.fromJson(GsonComponentSerializer.gson().serialize(component));
     }
 }

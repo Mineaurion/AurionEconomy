@@ -60,13 +60,13 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
 
     @Override
     public Optional<UUID> lookupUUID(String username) {
-        return bootstrap.getServer().map(MinecraftServer::getUserCache).flatMap(c -> c.findByName(username)).map(GameProfile::getId);
+        return bootstrap.getServer().map(MinecraftServer::getUserCache).flatMap(c -> Optional.ofNullable(c.findByName(username))).map(GameProfile::getId);
     }
 
     @Override
     public void sendMessageToSpecificPlayer(UUID uuid, Component message) {
         Optional<ServerPlayerEntity> player = bootstrap.getServer().map(MinecraftServer::getPlayerManager).map(s -> s.getPlayer(uuid));
-        player.ifPresent(p -> p.sendMessage(toNativeText(message)));
+        player.ifPresent(p -> p.sendMessage(toNativeText(message), false));
     }
 
     @Override

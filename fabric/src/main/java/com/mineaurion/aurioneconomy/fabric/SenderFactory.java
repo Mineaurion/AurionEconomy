@@ -36,7 +36,7 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
 
     @Override
     protected void sendMessage(ServerCommandSource sender, Component message) {
-        sender.sendFeedback(() -> toNativeText(message), false);
+        sender.sendFeedback(toNativeText(message), false);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
     @Override
     protected boolean isConsole(ServerCommandSource sender) {
         CommandOutput output = ((ServerCommandSourceAccessor) sender).getOutput();
-        return output == sender.getServer() || // console
+        return output == sender.getMinecraftServer() || // console
             output.getClass() == RconCommandOutput.class || // Rcon
             (output == CommandOutput.DUMMY && sender.getName().equals("")); // Functions
     }

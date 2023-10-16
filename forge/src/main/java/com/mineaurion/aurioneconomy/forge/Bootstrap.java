@@ -4,25 +4,25 @@ import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyBootstrap;
 import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.network.NetworkConstants;
+import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.function.Supplier;
+
+import static net.minecraftforge.fml.ExtensionPoint.DISPLAYTEST;
 
 @Mod(value = "aurioneconomy")
 public class Bootstrap implements AurionEconomyBootstrap {
@@ -55,13 +55,13 @@ public class Bootstrap implements AurionEconomyBootstrap {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onServerAboutToStart(ServerStartingEvent event){
+    public void onServerAboutToStart(FMLServerStartingEvent event){
         this.server = event.getServer();
         this.plugin.enable();
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onServerStopping(ServerStoppingEvent event){
+    public void onServerStopping(FMLServerStoppingEvent event){
         this.plugin.disable();
         MinecraftForge.EVENT_BUS.unregister(this);
         this.server = null;
@@ -81,19 +81,10 @@ public class Bootstrap implements AurionEconomyBootstrap {
     }
 
     private static void markAsNotRequiredClientSide() {
-        try {
-            ModLoadingContext.class.getDeclaredMethod("registerExtensionPoint", Class.class, Supplier.class)
-                    .invoke(
-                            ModLoadingContext.get(),
-                            IExtensionPoint.DisplayTest.class,
-                            (Supplier<?>) () -> new IExtensionPoint.DisplayTest(
-                                    () -> NetworkConstants.IGNORESERVERONLY,
-                                    (a, b) -> true
-                            )
-                    );
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new IllegalStateException(e);
-        }
+        ModLoadingContext.get().registerExtensionPoint(DISPLAYTEST, () -> Pair.of(
+                () -> FMLNetworkConstants.IGNORESERVERONLY, // ignore me, I'm a server only mod
+                (s,b) -> true // I accept anything from the server or the save, if I'm asked
+        ));
     }
 
     public Optional<MinecraftServer> getServer(){
