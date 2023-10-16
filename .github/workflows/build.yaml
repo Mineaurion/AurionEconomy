@@ -54,5 +54,5 @@ jobs:
       - name: Upload ${{ inputs.platform }}
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-${{ inputs.platform }}-snapshot.jar
+          name: ${{ github.event.repository.name }}-${{ inputs.version }}.jar
           path: ${{ inputs.platform }}/build/libs/*-all.jar
