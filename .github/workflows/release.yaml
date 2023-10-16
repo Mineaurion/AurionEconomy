@@ -5,17 +5,15 @@ on:
       - 'v*'
 
 jobs:
-  get-version:
+  getVersion:
     runs-on: ubuntu-22.04
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.vars.outputs.tag }}
     steps:
-      - id: version
-        env:
-          REF: ${{ github.ref }}
-        run: echo "version=${REF:11}" >> "$GITHUB_OUTPUT"
+      - id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
   build:
-    needs: get-version
+    needs: getVersion
     strategy:
       matrix:
         platform: [ "bukkit", "sponge", "forge", "fabric" ]
@@ -31,7 +29,7 @@ jobs:
             branch: "1.18"
     uses: ./.github/workflows/build.yaml
     with:
-      version: ${{ needs.version.outputs.version }}
+      version: ${{ needs.getVersion.outputs.tag }}
       platform: ${{ matrix.platform }}
       branch: ${{ matrix.branch }}
   release:

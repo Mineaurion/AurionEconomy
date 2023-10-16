@@ -4,6 +4,22 @@ plugins {
     id 'java'
 }
 
+def getWorkingBranch() {
+    // Triple double-quotes for the breaklines
+    def gitBranch = "Unknown branch"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+    } catch (e) {
+    }
+    gitBranch = gitBranch.equalsIgnoreCase("master") ? "latest" : gitBranch;
+    return "-" + gitBranch
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'java-library'
@@ -40,6 +56,6 @@ subprojects {
     }
 
     jar{
-        archivesBaseName = project.jarName + "-" + project.name
+        archivesBaseName = project.jarName + "-" + project.name + getWorkingBranch()
     }
 }
