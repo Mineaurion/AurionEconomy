@@ -1,10 +1,10 @@
 package com.mineaurion.aurioneconomy.forge;
 
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.kyori.adventure.text.Component;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.rcon.RconConsoleSource;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
 
     @Override
     protected void sendMessage(CommandSourceStack sender, Component message) {
-        sender.sendSuccess(() -> toNativeText(message), false);
+        sender.sendSuccess(toNativeText(message), false);
     }
 
     @Override
@@ -46,12 +46,14 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
 
     @Override
     protected boolean isConsole(CommandSourceStack sender) {
-        CommandSource output = sender.source;
-        return output == sender.getServer() || // Console
-                output.getClass() == RconConsoleSource.class || // Rcon
-                (output == CommandSource.NULL && sender.getTextName().equals("")); // Functions
+        boolean output = true;
+        try {
+            ServerPlayer player = sender.getPlayerOrException();
+            output = false;
+        } catch (CommandSyntaxException e){
+            // ignore this is not a player
+        }
+        return output;
 
     }
-
-
 }

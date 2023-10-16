@@ -36,7 +36,7 @@ public class SenderFactory extends com.mineaurion.aurioneconomy.common.command.s
 
     @Override
     protected void sendMessage(ServerCommandSource sender, Component message) {
-        sender.sendFeedback(() -> toNativeText(message), false);
+        sender.sendFeedback(toNativeText(message), false);
     }
 
     @Override

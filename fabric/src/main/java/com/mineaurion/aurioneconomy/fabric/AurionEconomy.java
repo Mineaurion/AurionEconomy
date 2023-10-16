@@ -66,7 +66,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public void sendMessageToSpecificPlayer(UUID uuid, Component message) {
         Optional<ServerPlayerEntity> player = bootstrap.getServer().map(MinecraftServer::getPlayerManager).map(s -> s.getPlayer(uuid));
-        player.ifPresent(p -> p.sendMessage(toNativeText(message)));
+        player.ifPresent(p -> p.sendMessage(toNativeText(message), false));
     }
 
     @Override

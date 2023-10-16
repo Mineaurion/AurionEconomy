@@ -7,6 +7,7 @@ import com.mineaurion.aurioneconomy.common.plugin.AurionEconomyPlugin;
 import com.mojang.authlib.GameProfile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minecraft.Util;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -82,7 +83,7 @@ public class AurionEconomy extends AbstractAurionEconomyPlugin {
     @Override
     public void sendMessageToSpecificPlayer(UUID uuid, Component message) {
         Optional<ServerPlayer> player = getBootstrap().getServer().map(MinecraftServer::getPlayerList).map(playerList -> playerList.getPlayer(uuid));
-        player.ifPresent(p -> p.sendSystemMessage(toNativeText(message)));
+        player.ifPresent(p -> p.sendMessage(toNativeText(message), Util.NIL_UUID));
     }
 
     public static net.minecraft.network.chat.Component toNativeText(Component component){

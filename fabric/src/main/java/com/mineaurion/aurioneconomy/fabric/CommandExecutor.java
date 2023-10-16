@@ -4,7 +4,7 @@ import com.mineaurion.aurioneconomy.common.command.BrigadierCommandManager;
 import com.mineaurion.aurioneconomy.common.command.sender.Sender;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -22,7 +22,7 @@ public class CommandExecutor extends BrigadierCommandManager<ServerCommandSource
     }
 
     public void register(){
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             for(String alias: COMMAND_ALIASES){
                 LiteralCommandNode<ServerCommandSource> command = literal(alias).executes(this).build();
 
