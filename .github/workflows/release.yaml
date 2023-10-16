@@ -21,8 +21,14 @@ jobs:
         platform: [ "bukkit", "sponge", "forge", "fabric" ]
         branch: ["master"]
         include:
-          - platform: ["forge", "fabric"]
-            branch: [ "1.16", "1.18" ]
+          - platform: forge
+            branch: "1.16"
+          - platform: fabric
+            branch: "1.16"
+          - platform: forge
+            branch: "1.18"
+          - platform: fabric
+            branch: "1.18"
     uses: ./.github/workflows/build.yaml
     with:
       version: ${{ needs.version.outputs.version }}
