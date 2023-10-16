@@ -15,6 +15,7 @@ jobs:
           REF: ${{ github.ref }}
         run: echo "version=${REF:11}" >> "$GITHUB_OUTPUT"
   build:
+    needs: get-version
     strategy:
       matrix:
         platform: [ "bukkit", "sponge", "forge", "fabric" ]
