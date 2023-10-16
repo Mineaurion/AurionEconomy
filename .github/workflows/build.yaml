@@ -1,15 +1,25 @@
 name: Build
 on:
   workflow_call:
-
+    inputs:
+      platform:
+        required: true
+        type: string
+      branch:
+        required: false
+        default: master
+        type: string
+      version:
+        required: false
+        default: SNAPSHOT
+        type: string
 jobs:
   build:
-    strategy:
-      matrix:
-        platform: [ bukkit, sponge, forge, fabric ]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -27,20 +37,22 @@ jobs:
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
       - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ matrix.platform }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
       - name: Forge don't like snapshot version
-        if: ${{ matrix.platform=='forge' }}
+        if: ${{ inputs.platform=='forge' && inputs.version=='SNAPSHOT' }}
         run: |
           sed -i "s/pluginVersion=SNAPSHOT/pluginVersion=1/" gradle.properties
-
+      - name: Change version
+        if: ${{ inputs.version!='SNAPSHOT' }}
+        run: |
+          sed -i "s/pluginVersion=SNAPSHOT/pluginVersion=${{ inputs.version}}/" gradle.properties
       - name: Create release with Gradle
-        run: ./gradlew ${{ matrix.platform }}:clean ${{ matrix.platform }}:build
-
-      - name: Upload ${{ matrix.platform }}
+        run: ./gradlew ${{ inputs.platform }}:clean ${{ inputs.platform }}:build
+      - name: Upload ${{ inputs.platform }}
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ github.event.repository.name }}-${{ matrix.platform }}-snapshot.jar
-          path: ${{ matrix.platform }}/build/libs/*-all.jar
+          name: ${{ github.event.repository.name }}-${{ inputs.platform }}-snapshot.jar
+          path: ${{ inputs.platform }}/build/libs/*-all.jar

@@ -41,4 +41,6 @@ shadowJar {
     relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
     relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'
     relocate 'me.lucko.commodore', 'com.mineaurion.aurioneconomy.lib.commodore'
+    relocate 'com.google', 'com.mineaurion.aurioneconomy.lib.google'
+
 }

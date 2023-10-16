@@ -50,7 +50,7 @@ public class SqlStorage implements StorageImplementation {
 
         boolean tableExists;
         try(Connection c = this.connectionFactory.getConnection()){
-            tableExists = tableExists(c, this.statementProcessor.apply("{prefix}account"));
+            tableExists = tableExists(c, this.statementProcessor.apply("{prefix}accounts"));
         }
 
         if(!tableExists){

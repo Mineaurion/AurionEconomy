@@ -5,6 +5,8 @@ authors: [Yann151924]
 website: https://mineaurion.com
 depend:
   - Vault
+loadbefore:
+  - DeluxeMenu
 commands:
   money:
     description: "Money Command"
