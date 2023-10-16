@@ -1,0 +1,46 @@
+repositories {
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation project(':common')
+
+    compileOnly 'org.checkerframework:checker-qual:3.21.2'
+    compileOnly 'org.jetbrains:annotations:23.1.0'
+
+    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    api 'net.kyori:adventure-platform-bukkit:4.3.0'
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') {
+        exclude(module: 'bukkit')
+    }
+    //compile files('libs/spigot-1.7.10-SNAPSHOT-b1657.jar')
+}
+
+processResources {
+    duplicatesStrategy = 'include'
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'version': project.version
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+shadowJar {
+    relocate 'org.slf4j', 'com.mineaurion.aurioneconomy.lib.slf4j'
+    relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
+    relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'
+    relocate 'me.lucko.commodore', 'com.mineaurion.aurioneconomy.lib.commodore'
+    relocate 'com.google', 'com.mineaurion.aurioneconomy.lib.google'
+
+}

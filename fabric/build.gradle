@@ -1,0 +1,75 @@
+import net.fabricmc.loom.task.RemapJarTask
+
+repositories {
+    maven { url 'https://jitpack.io' }
+    maven { url "https://maven.terraformersmc.com/" }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.siphalor.de/" }
+    maven { url "https://maven.isxander.dev/releases" }
+}
+
+apply plugin: 'fabric-loom'
+
+dependencies {
+    minecraft 'com.mojang:minecraft:1.20.1'
+    mappings 'net.fabricmc:yarn:1.20.1+build.2:v2'
+    modImplementation 'net.fabricmc:fabric-loader:0.14.21'
+
+    Set<String> apiModules = [
+            'fabric-api-base',
+            'fabric-command-api-v2',
+            'fabric-lifecycle-events-v1',
+    ]
+
+    apiModules.forEach {
+        modImplementation(fabricApi.module(it, '0.83.1+1.20.1'))
+    }
+    shadow project(':common')
+}
+
+processResources {
+    inputs.property "version", project.version
+    filteringCharset "UTF-8"
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+task remappedShadowJar(type: RemapJarTask) {
+    dependsOn tasks.shadowJar
+    input.set(tasks.shadowJar.archiveFile)
+    addNestedDependencies.set(true)
+}
+
+tasks.assemble.dependsOn tasks.remappedShadowJar
+
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    // withSourcesJar()
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+
+    dependencies {
+        exclude('net.fabricmc:.*')
+        // We don't want to include the mappings in the jar do we?
+        exclude '/mappings/*'
+    }
+
+    relocate 'org.slf4j', 'com.mineaurion.aurioneconomy.lib.slf4j'
+    relocate 'net.kyori.adventure', 'com.mineaurion.aurioneconomy.lib.adventure'
+    relocate 'net.kyori.event', 'com.mineaurion.aurioneconomy.lib.eventbus'
+    relocate 'me.lucko.commodore', 'com.mineaurion.aurioneconomy.lib.commodore'
+    relocate 'com.google', 'com.mineaurion.aurioneconomy.lib.google'
+}
+
+artifacts {
+    archives remappedShadowJar
+    shadow shadowJar
+}

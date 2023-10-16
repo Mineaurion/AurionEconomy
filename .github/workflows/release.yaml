@@ -1,0 +1,44 @@
+name: Create Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  get-version:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - id: version
+        env:
+          REF: ${{ github.ref }}
+        run: echo "version=${REF:11}" >> "$GITHUB_OUTPUT"
+  build:
+    strategy:
+      matrix:
+        platform: [ "bukkit", "sponge", "forge", "fabric" ]
+        branch: ["master"]
+        include:
+          - platform: ["forge", "fabric"]
+            branch: [ "1.16", "1.18" ]
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ needs.version.outputs.version }}
+      platform: ${{ matrix.platform }}
+      branch: ${{ matrix.branch }}
+  release:
+    needs:
+      - build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v3
+        with:
+          path: build
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            build/**/*.jar
